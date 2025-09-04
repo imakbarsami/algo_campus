@@ -1,12 +1,9 @@
 import React from 'react'
-import Header from './Header'
-import Footer from './Footer'
 import Course from './Course'
 
 const Courses = () => {
     return (
         <>
-            <Header/>
             <div className='container pb-5 pt-3'>
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
@@ -198,7 +195,6 @@ const Courses = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     )
 }
