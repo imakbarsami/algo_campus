@@ -10,6 +10,7 @@ import MyCourses from './components/pages/account/MyCourses.jsx';
 import MyLearning from './components/pages/account/MyLearning.jsx';
 import WatchCourse from './components/pages/account/WatchCourse.jsx';
 import ChangePassword from './components/pages/account/ChangePassword.jsx';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,18 +18,23 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path='/courses' element={<Courses/>}/>
-        <Route path='/detail' element={<Details/>}/>
-        <Route path='/account/login' element={<Login/>}/>
-        <Route path='/account/register' element={<Register/>}/>
-        <Route path='/account/my-courses' element={<MyCourses/>}/>
-        <Route path='/account/courses-enrolled' element={<MyLearning/>}/>
-        <Route path='/account/watch-courses' element={<WatchCourse/>}/>
-        <Route path='/account/change-password' element={<ChangePassword/>}/>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path='/courses' element={<Courses />} />
+          <Route path='/detail' element={<Details />} />
+          <Route path='/account/login' element={<Login />} />
+          <Route path='/account/register' element={<Register />} />
+          <Route path='/account/my-courses' element={<MyCourses />} />
+          <Route path='/account/courses-enrolled' element={<MyLearning />} />
+          <Route path='/account/watch-courses' element={<WatchCourse />} />
+          <Route path='/account/change-password' element={<ChangePassword />} />
+        </Routes>
       </BrowserRouter>
+
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </>
   )
 }
