@@ -1,13 +1,15 @@
-import React, { use } from 'react'
+import React, { use, useContext } from 'react'
 import Layout from '../common/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { apiUrl } from '../common/Config'
 import { toast } from 'react-hot-toast'
+import { AuthContext } from '../context/Auth'
 
 const Login = () => {
 
   const navigate = useNavigate()
+  const {login}=useContext(AuthContext)
 
   const {
     register,
@@ -35,6 +37,7 @@ const Login = () => {
             token: result.token,
           }
           localStorage.setItem('userInfoLMS',JSON.stringify(userInfo))
+          login(userInfo)
           navigate('/account/dashboard')
         } else {
           if (result.message) {
