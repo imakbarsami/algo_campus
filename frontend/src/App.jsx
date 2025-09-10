@@ -13,6 +13,9 @@ import ChangePassword from './components/pages/account/ChangePassword.jsx';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './components/pages/account/Dashboard.jsx';
 import { RequiredAuth } from './components/common/RequiredAuth.jsx';
+import CreateCourse from './components/pages/course/CreateCourse.jsx';
+import EditCourse from './components/pages/course/EditCourse.jsx';
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -34,6 +37,18 @@ function App() {
           <Route path='/account/dashboard' element={
             <RequiredAuth>
               <Dashboard />
+            </RequiredAuth>
+          } />
+
+          <Route path='/account/courses/create' element={
+            <RequiredAuth>
+              <CreateCourse />
+            </RequiredAuth>
+          } />
+
+          <Route path='/account/courses/edit/:id' element={
+            <RequiredAuth>
+              <EditCourse />
             </RequiredAuth>
           } />
           
