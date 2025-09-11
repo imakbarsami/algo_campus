@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../../common/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import UserSidebar from '../../common/UserSidebar'
@@ -9,6 +9,11 @@ import toast from 'react-hot-toast'
 const EditCourse = () => {
 
     const { register, handleSubmit, formState: { errors }, setError } = useForm()
+    const [categories, setCategories] = useState([])
+    const [levels,setLevels]=useState([])
+    const [languages,setLanguages]=useState([])
+
+
     const navigate = useNavigate()
 
     const onSubmit = async (data) => {
@@ -28,6 +33,39 @@ const EditCourse = () => {
         //     })
 
     }
+
+
+    const coursesMetaData=async()=>{
+
+        await fetch(`${apiUrl}/courses/meta-data`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/json',
+                'Authorization':`Bearer ${token}`
+            }
+        })
+        .then(res=>res.json())
+        .then(result=>{
+            if(result.status==200){
+                //console.log(result)
+                setCategories(result.categories)
+                setLevels(result.levels)
+                setLanguages(result.languages)
+
+            }else{
+                console.log('something went wrong')
+            }
+        })
+
+
+    }
+
+    useEffect(()=>{
+        coursesMetaData()
+    },[])
+
+
     return (
         <Layout>
             <section className='section-4'>
@@ -75,6 +113,13 @@ const EditCourse = () => {
                                                     <label className='form-label' htmlFor="category">Category</label>
                                                     <select className='form-select' id='category'>
                                                         <option value="">Select a Category</option>
+                                                        {
+                                                            categories && categories.map((category,key)=>{
+                                                                return(
+                                                                    <option key={key} value={category.id}>{category.name}</option>
+                                                                )
+                                                            })
+                                                        }
 
                                                     </select>
                                                 </div>
@@ -83,6 +128,13 @@ const EditCourse = () => {
                                                     <label className='form-label' htmlFor="level">Level</label>
                                                     <select className='form-select' id='level'>
                                                         <option value="">Select a Level</option>
+                                                        {
+                                                            levels && levels.map((level,key)=>{
+                                                                return(
+                                                                    <option key={key} value={level.id}>{level.name}</option>
+                                                                )
+                                                            })
+                                                        }
 
                                                     </select>
                                                 </div>
@@ -91,6 +143,13 @@ const EditCourse = () => {
                                                     <label className='form-label' htmlFor="language">Language</label>
                                                     <select className='form-select' id='language'>
                                                         <option value="">Select a Language</option>
+                                                        {
+                                                            languages && languages.map((language,key)=>{
+                                                                return(
+                                                                    <option key={key} value={language.id}>{language.name}</option>
+                                                                )
+                                                            })
+                                                        }
 
                                                     </select>
                                                 </div>
