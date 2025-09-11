@@ -24,7 +24,7 @@ const EditCourse = () => {
         // })
         //     .then(res => res.json())
         //     .then(result => {
-               
+
         //     })
 
     }
@@ -49,29 +49,103 @@ const EditCourse = () => {
                         </div>
                         <div className='col-lg-9'>
                             <div className='row'>
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <div className='card border-0 shadow-lg'>
-                                        <div className='card-body p-4'>
-                                            <div className='mb-3'>
-                                                <label htmlFor="title">Title</label>
-                                                <input
+
+                                <div className='col-md-7'>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <div className='card border-0 shadow-lg'>
+                                            <div className='card-body p-4'>
+                                                <h4 className='h5 border-bottom pb-3 mb-3'>Course Details</h4>
+                                                <div className='mb-3'>
+                                                    <label className='form-label' htmlFor="title">Title</label>
+                                                    <input
+                                                        {
+                                                        ...register('title', {
+                                                            required: 'the title field is required'
+                                                        })
+                                                        }
+                                                        type="text"
+                                                        placeholder='Title'
+                                                        className={`form-control ${errors.title && 'is-invalid'}`}
+                                                    />
                                                     {
-                                                    ...register('title', {
-                                                        required: 'the title field is required'
-                                                    })
+                                                        errors.title && <p className='invalid-feedback'>{errors.title.message}</p>
                                                     }
-                                                    type="text"
-                                                    placeholder='Title'
-                                                    className={`form-control ${errors.title && 'is-invalid'}`}
-                                                />
-                                                {
-                                                    errors.title && <p className='invalid-feedback'>{errors.title.message}</p>
-                                                }
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label className='form-label' htmlFor="category">Category</label>
+                                                    <select className='form-select' id='category'>
+                                                        <option value="">Select a Category</option>
+
+                                                    </select>
+                                                </div>
+
+                                                <div className="mb-3">
+                                                    <label className='form-label' htmlFor="level">Level</label>
+                                                    <select className='form-select' id='level'>
+                                                        <option value="">Select a Level</option>
+
+                                                    </select>
+                                                </div>
+
+                                                <div className="mb-3">
+                                                    <label className='form-label' htmlFor="language">Language</label>
+                                                    <select className='form-select' id='language'>
+                                                        <option value="">Select a Language</option>
+
+                                                    </select>
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label className='form-label' htmlFor="description">Description</label>
+                                                    <textarea className='form-control' placeholder="Description" id="description" rows={5}></textarea>
+                                                </div>
+
+                                                <label className='form-label'>Pricing</label>
+                                                <div className='mb-3'>
+                                                    <label className='form-label' htmlFor="sell-price">Sell Price</label>
+                                                    <input
+                                                        {
+                                                        ...register('SellPrice', {
+                                                            required: 'the title field is required'
+                                                        })
+                                                        }
+                                                        type="text"
+                                                        placeholder='Sell Price'
+                                                        id='sell-price'
+                                                        className={`form-control ${errors.title && 'is-invalid'}`}
+                                                    />
+                                                    {
+                                                        errors.title && <p className='invalid-feedback'>{errors.title.message}</p>
+                                                    }
+                                                </div>
+
+                                                <div className='mb-3'>
+                                                    <label className='form-label' htmlFor="cross-price">Cross Price</label>
+                                                    <input
+                                                        {
+                                                        ...register('title', {
+                                                            required: 'the title field is required'
+                                                        })
+                                                        }
+                                                        type="text"
+                                                        placeholder='Cross Price'
+                                                        id='cross-price'
+                                                        className={`form-control ${errors.title && 'is-invalid'}`}
+                                                    />
+                                                    {
+                                                        errors.title && <p className='invalid-feedback'>{errors.title.message}</p>
+                                                    }
+                                                </div>
+                                                <button className='btn btn-primary'>Update</button>
                                             </div>
-                                            <button className='btn btn-primary'>Submit</button>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
+
+                                <div className='col-md-5'>
+
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
