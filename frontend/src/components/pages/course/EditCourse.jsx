@@ -5,6 +5,8 @@ import UserSidebar from '../../common/UserSidebar'
 import { set, useForm } from 'react-hook-form'
 import { apiUrl, token } from '../../common/Config'
 import toast from 'react-hot-toast'
+import ManageOutcome from '../course/ManageOutcome'
+
 
 const EditCourse = () => {
 
@@ -280,10 +282,8 @@ const EditCourse = () => {
                                 </div>
 
                                 <div className='col-md-5'>
-
+                                   <ManageOutcome/>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
