@@ -58,7 +58,7 @@ const ManageOutcom = () => {
 
     const [outcomes, setOutcomes] = useState([])
 
-    const fetchOptions = async () => {
+    const fetchOutcomes = async () => {
 
         await fetch(`${apiUrl}/outcomes?course_id=${prams.id}`, {
             method: 'GET',
@@ -101,7 +101,7 @@ const ManageOutcom = () => {
     }
 
     useEffect(() => {
-        fetchOptions()
+        fetchOutcomes()
     }, [])
 
 
