@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { apiUrl, token } from '../../common/Config'
 import { toast } from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { MdDragIndicator } from 'react-icons/md'
 import { BsPencilSquare } from 'react-icons/bs'
 import { FaTrashAlt } from 'react-icons/fa'
@@ -20,7 +20,7 @@ const ManageOutcom = () => {
 
     const [showOutcome, setShowOutcome] = useState(false);
     const handleClose = () => setShowOutcome(false);
-    const [outcomeData,setOutcomeData]=useState()
+    const [outcomeData, setOutcomeData] = useState()
     const handleShow = (outcome) => {
         setOutcomeData(outcome)
         setShowOutcome(true)
@@ -77,6 +77,29 @@ const ManageOutcom = () => {
             })
     }
 
+    const deleteOutcome = async (id) => {
+
+        if (confirm('Are you sure you want to delete this outcome?')) {
+            await fetch(`${apiUrl}/outcomes/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        const newOutcomes = outcomes.filter(outcome => outcome.id != id)
+                        setOutcomes(newOutcomes)
+                        toast.success(result.message)
+                    }
+                })
+        }
+
+    }
+
     useEffect(() => {
         fetchOptions()
     }, [])
@@ -122,12 +145,12 @@ const ManageOutcom = () => {
                                                 {outcome.text}
                                             </div>
                                             <div className="d-flex">
-                                                <a href="#" onClick={()=>handleShow(outcome)} className='text-primary me-1'>
+                                                <Link onClick={() => handleShow(outcome)} className='text-primary me-1'>
                                                     <BsPencilSquare />
-                                                </a>
-                                                <a href="" className='text-danger'>
+                                                </Link>
+                                                <Link onClick={() => deleteOutcome(outcome.id)} className='text-danger'>
                                                     <FaTrashAlt />
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
