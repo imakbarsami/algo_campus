@@ -11,7 +11,7 @@ class RequirementController extends Controller
 {
     public function index(Request $request){
 
-        $requirments=Requirment::where('course_id',$request->course_id)->get();
+        $requirments=Requirment::where('course_id',$request->course_id)->orderBy('sort_order')->get();
 
         return response()->json([
             'status'=>200,
@@ -94,6 +94,20 @@ class RequirementController extends Controller
         return response()->json([
             'status'=>200,
             'message'=>'Requirment Deleted Successfully'
+        ],200);
+    }
+
+    public function sortRequirement(Request $request){
+
+        if($request->requirements){
+            foreach($request->requirements as $key=>$requirement){
+                Requirment::where('id',$requirement['id'])->update(['sort_order'=>$key]);
+            }
+        }
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'Requirment Sorted Successfully'
         ],200);
     }
 }

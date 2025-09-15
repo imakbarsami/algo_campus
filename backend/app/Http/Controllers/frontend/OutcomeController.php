@@ -11,7 +11,9 @@ class OutcomeController extends Controller
 {
     public function index(Request $request){
  
-        $outcomes=Outcome::where('course_id',$request->course_id)->get();
+        $outcomes=Outcome::where('course_id',$request->course_id)
+                            ->orderBy('sort_order')
+                            ->get();
         //dd($outcome);
         return response()->json([
             'status'=>200,
@@ -99,5 +101,19 @@ class OutcomeController extends Controller
             'status'=>200,
             'message'=>'outcome deleted successfully',
         ],200);
+    }
+
+    public function sortOutcome(Request $request){
+
+        if($request->outcomes){
+            foreach($request->outcomes as $key=>$outcome){
+                Outcome::where('id',$outcome['id'])->update(['sort_order'=>$key]);
+            }
+        }
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'outcome sorted successfully',
+        ]);
     }
 }
