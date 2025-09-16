@@ -7,9 +7,12 @@ import { apiUrl, token } from '../../common/Config'
 import toast from 'react-hot-toast'
 import ManageOutcome from '../course/ManageOutcome'
 import ManageRequirement from './ManageRequirement'
+import EditCover from './EditCover'
 
 
 const EditCourse = () => {
+
+    const [course, setCourse] = useState([])
 
     const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
         defaultValues: async () => {
@@ -37,6 +40,8 @@ const EditCourse = () => {
 
                             }
                         )
+                        setCourse(result.data)
+                        //console.log(result)
 
                     } else {
                         toast.error(result.message)
@@ -46,6 +51,7 @@ const EditCourse = () => {
         }
     })
 
+    
     const [categories, setCategories] = useState([])
     const [levels, setLevels] = useState([])
     const [languages, setLanguages] = useState([])
@@ -70,6 +76,7 @@ const EditCourse = () => {
                 setLoading(false)
                 if (result.status == 200) {
                     toast.success(result.message)
+                    setCourse(result.data)
                     //navigate('/account/my-courses')
                 } else {
                     const errors = result.errors
@@ -285,6 +292,10 @@ const EditCourse = () => {
                                 <div className='col-md-5'>
                                    <ManageOutcome/>
                                    <ManageRequirement/>
+                                    <EditCover
+                                     course={course}
+                                     setCourse={setCourse}
+                                    />
                                 </div>
                             </div>
                         </div>
