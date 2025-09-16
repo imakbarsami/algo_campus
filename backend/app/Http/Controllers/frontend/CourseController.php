@@ -8,7 +8,10 @@ use App\Models\Course;
 use App\Models\Language;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class CourseController extends Controller
 {
@@ -109,6 +112,59 @@ class CourseController extends Controller
             'status'=>200,
             'data'=>$course,
             'message'=>'Course Updated Successfully'
+        ],200);
+    }
+
+    public function saveCourseImage(Request $request,$id){
+
+        $validator=Validator::make($request->all(),[
+            'image'=>'required|mimes:jpg,jpeg,png'
+        ]);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->errors()
+            ],400);
+        }
+
+        $course=Course::find($id);
+        if(!$course){
+            return response()->json([
+                'status'=>404,
+                'message'=>'Course Not Found'
+            ],404);
+        }
+
+        $oldImage=$course->image;
+        if($oldImage){
+
+            if(File::exists(public_path('uploads/courses/'.$oldImage))){
+                File::delete(public_path('uploads/courses/'.$oldImage));
+            }
+
+            if(File::exists(public_path('uploads/courses/small/'.$oldImage))){
+                File::delete(public_path('uploads/courses/small/'.$oldImage));
+            }
+        }
+
+        $ext=$request->image->getClientOriginalExtension();
+        $imageName=strtotime('now').'-'.$course->id.'.'.$ext;
+        $courseImage=$request->image->move(public_path('uploads/courses'),$imageName);
+
+
+        $manager = new ImageManager(Driver::class);
+        $image = $manager->read($courseImage);
+        $smallImage = $image->cover(750, 450);
+        $smallImage->save(public_path('uploads/courses/small/'.$imageName));
+
+        $course->image=$imageName;
+        $course->save();
+
+        return response()->json([
+            'status'=>200,
+            'data'=>$course,
+            'message'=>'Course Image Uploaded Successfully',
         ],200);
     }
 }
