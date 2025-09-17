@@ -26,7 +26,7 @@ class ChapterController extends Controller
 
         $validate=Validator::make($request->all(),[
             'course_id'=>'required',
-            'chapter'=>'required',
+            'chapter'=>'required|min:5',
         ]);
 
         if($validate->fails()){
@@ -63,7 +63,7 @@ class ChapterController extends Controller
 
 
         $validate=Validator::make($request->all(),[
-            'chapter'=>'required',
+            'chapter'=>'required|min:5',
         ]);
 
         if($validate->fails()){

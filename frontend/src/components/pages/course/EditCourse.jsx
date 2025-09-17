@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import ManageOutcome from '../course/ManageOutcome'
 import ManageRequirement from './ManageRequirement'
 import EditCover from './EditCover'
+import ManageChapter from './ManageChapter'
 
 
 const EditCourse = () => {
@@ -287,6 +288,10 @@ const EditCourse = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <ManageChapter
+                                     course={course}
+                                     pram={props}
+                                    />
                                 </div>
 
                                 <div className='col-md-5'>
