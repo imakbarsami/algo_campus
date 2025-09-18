@@ -4,6 +4,9 @@ import { apiUrl, token } from '../../common/Config'
 import toast from 'react-hot-toast'
 import Accordion from 'react-bootstrap/Accordion';
 import UpdateChapter from './UpdateChapter';
+import { Link } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
+import CreateLesson from './CreateLesson';
 
 
 
@@ -59,6 +62,7 @@ const ManageChapter = ({ course, pram }) => {
 
     }
 
+        //chapter modal
         const [showChapter, setShowChapter] = useState(false);
         const handleClose = () => setShowChapter(false);
         const [chapterData, setChapterData] = useState()
@@ -67,6 +71,18 @@ const ManageChapter = ({ course, pram }) => {
             setChapterData(chapter)
             setShowChapter(true)
         };
+
+
+        //lesson modal
+        const [showLessonModal, setShowLessonModal] = useState(false);
+        const handleCloseModal = () => setShowLessonModal(false);
+        const handleShowModal = () => {
+            setShowLessonModal(true)
+        };
+
+
+
+
     //console.log(course)
 
     const deleteChapter=async(id)=>{
@@ -105,9 +121,10 @@ const ManageChapter = ({ course, pram }) => {
             <div className="card shadow-lg border-0 mt-4">
                 <div className="card-body p-4">
                     <div className="d-flex">
-                        <h4 className="h5 mb-3">
-                            Chpater
-                        </h4>
+                        <div className="d-flex justify-content-between w-100">
+                            <h4 className="h5 mb-3"> Chpater</h4>
+                            <Link onClick={()=>handleShowModal()}><FaPlus size={12}/> <strong>Add Lesson</strong></Link>
+                        </div>
                     </div>
                     <form className='mb-4' onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-3">
@@ -152,6 +169,12 @@ const ManageChapter = ({ course, pram }) => {
                 handleClose={handleClose}
                 chapterData={chapterData}
                 setChapters={setChapters}
+            />
+
+            <CreateLesson
+                showLessonModal={showLessonModal}
+                handleCloseModal={handleCloseModal}
+                course={course}
             />
         </>
     )
