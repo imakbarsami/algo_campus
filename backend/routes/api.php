@@ -49,6 +49,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     //lesson routes
     Route::post('/lessons',[LessonController::class,'store']);
+    Route::get('/lesson/edit/{id}',[LessonController::class, 'edit']);
     Route::put('/lessons/{id}',[LessonController::class,'update']);
     Route::delete('/lessons/{id}',[LessonController::class,'destroy']);
 });

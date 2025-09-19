@@ -37,6 +37,22 @@ class LessonController extends Controller
         ],200);
     }
 
+    public function edit($id){
+
+        $lesson=Lesson::find($id);
+        
+        if(!$lesson){
+            return response()->json([
+                'status'=>404,
+                'message'=>'Lesson not found',
+            ],404);
+        }
+        return response()->json([
+            'status'=>200,
+            'data'=>$lesson,
+        ],200);
+    }
+
     public function update(Request $request,$id){
 
         $lesson=Lesson::find($id);

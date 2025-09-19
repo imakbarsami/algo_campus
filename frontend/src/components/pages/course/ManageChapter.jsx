@@ -181,7 +181,7 @@ const ManageChapter = ({ course, pram }) => {
                                                                                 lesson.is_free_premium == 'yes' && <span className="badge bg-success">Preview </span> 
                                                                             }
                                                                             
-                                                                            <Link className='ms-2'>
+                                                                            <Link to={`/account/courses/lesson-edit/${lesson.id}/${course.id}`} className='ms-2'>
                                                                              <BsPencilSquare/>
                                                                             </Link>
 
