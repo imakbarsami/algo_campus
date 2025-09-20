@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast'
 const EditLesson = ({ placeholder }) => {
 
     const [checked, setChecked] = React.useState(false)
+    const [description,setDescription]=React.useState('')
     const { register, handleSubmit, formState: { errors }, reset, setError } = useForm(
         {
             defaultValues:async()=>{
@@ -42,6 +43,8 @@ const EditLesson = ({ placeholder }) => {
     //update lesson
     const onSubmit = async (data) => {
         //console.log(data)
+        const formData={...data,description:description}
+        console.log(formData)
         await fetch(`${apiUrl}/lessons/${prams.id}`,{
             method:'PUT',
             headers: {
@@ -49,7 +52,7 @@ const EditLesson = ({ placeholder }) => {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body:JSON.stringify(data)
+            body:JSON.stringify(formData)
         }).then(res=>res.json())
         .then(result=>{
             if(result.status==200){
@@ -204,7 +207,9 @@ const EditLesson = ({ placeholder }) => {
                                                         config={config}
                                                         tabIndex={1} // tabIndex of textarea
                                                         onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                                                        onChange={newContent => { }}
+                                                        onChange={newContent => {
+                                                            setDescription(newContent)
+                                                         }}
                                                     />
                                                 </div>
 
