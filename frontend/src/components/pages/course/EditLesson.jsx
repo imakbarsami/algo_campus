@@ -6,11 +6,13 @@ import { set, useForm } from 'react-hook-form'
 import { apiUrl, token } from '../../common/Config'
 import JoditEditor from 'jodit-react';
 import { toast } from 'react-hot-toast'
+import LessonVideo from './LessonVideo'
 
 const EditLesson = ({ placeholder }) => {
 
     const [checked, setChecked] = React.useState(false)
     const [description,setDescription]=React.useState('')
+    const [lesson,setLesson]=React.useState({})
     const { register, handleSubmit, formState: { errors }, reset, setError } = useForm(
         {
             defaultValues:async()=>{
@@ -33,6 +35,7 @@ const EditLesson = ({ placeholder }) => {
                         })
                         setChecked(result.data.is_free_premium=='yes'?true:false)
                         setContent(result.data.description)
+                        setLesson(result.data)
                     }
                 })
             }
@@ -244,8 +247,6 @@ const EditLesson = ({ placeholder }) => {
                                                     type="checkbox"  className='form-check-input' id='freeLesson' />
                                                     <label className='form-check-label ms-2' htmlFor="freeLesson">Free Lesson</label>
                                                 </div>
-
-
                                                
                                                 <button disabled={loading} className='btn btn-primary mt-4'>{loading == false ? 'Update' : 'Please wait...'}</button>
                                             </div>
@@ -255,7 +256,7 @@ const EditLesson = ({ placeholder }) => {
                                 </div>
 
                                 <div className='col-md-5'>
-
+                                    <LessonVideo lesson={lesson}/>
                                 </div>
                             </div>
                         </div>
