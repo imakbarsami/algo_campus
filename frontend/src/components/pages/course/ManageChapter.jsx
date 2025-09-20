@@ -108,6 +108,26 @@ const ManageChapter = ({ course, pram }) => {
         }
     }
 
+    //delete lesson
+    const deleteLesson=async(id)=>{
+        if(confirm('Are you sure you want to delete this lesson?')){
+            await fetch(`${apiUrl}/lessons/${id}`,{
+                method:'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res=>res.json())
+            .then(result=>{
+                if(result.status==200){
+                    toast.success(result.message)
+                    setChapters({type:"DELETE_CHAPTER",payload:result.data})
+                }
+            })
+        }
+    }
+
     React.useEffect(() => {
 
         if (course.chapters) {
@@ -185,7 +205,7 @@ const ManageChapter = ({ course, pram }) => {
                                                                              <BsPencilSquare/>
                                                                             </Link>
 
-                                                                            <Link className='ms-2 text-danger'>
+                                                                            <Link onClick={()=>deleteLesson(lesson.id)} className='ms-2 text-danger'>
                                                                              <FaTrashAlt/>
                                                                             </Link>
                                                                         </div>

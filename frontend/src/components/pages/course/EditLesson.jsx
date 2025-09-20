@@ -43,6 +43,7 @@ const EditLesson = ({ placeholder }) => {
     //update lesson
     const onSubmit = async (data) => {
         //console.log(data)
+        setLoading(true)
         const formData={...data,description:description}
         console.log(formData)
         await fetch(`${apiUrl}/lessons/${prams.id}`,{
@@ -56,6 +57,7 @@ const EditLesson = ({ placeholder }) => {
         }).then(res=>res.json())
         .then(result=>{
             if(result.status==200){
+                setLoading(false)
                 toast.success(result.message)
                 reset({
                     title:result.data.title,
@@ -103,7 +105,7 @@ const EditLesson = ({ placeholder }) => {
 
     const config = useMemo(() => ({
         readonly: false, // all options from https://xdsoft.net/jodit/docs/,
-        placeholder: placeholder || 'Start typings...'
+        placeholder: placeholder || ''
     }),
         [placeholder]
     );
