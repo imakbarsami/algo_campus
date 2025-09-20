@@ -132,14 +132,14 @@ class LessonController extends Controller
         $oldVideo=$lesson->video;
 
         if($oldVideo){
-            if(File::exists(public_path('uploads/course/videos/'.$oldVideo))){
-                File::delete(public_path('uploads/course/videos/'.$oldVideo));
+            if(File::exists(public_path('uploads/courses/videos/'.$oldVideo))){
+                File::delete(public_path('uploads/courses/videos/'.$oldVideo));
             }
         }
 
         $ext=$request->video->getClientOriginalExtension();
         $newVideo=strtotime('now').'-'.$lesson->id.'.'.$ext;
-        $request->video->move(public_path('uploads/course/videos/'),$newVideo);
+        $request->video->move(public_path('uploads/courses/videos/'),$newVideo);
 
         $lesson->video=$newVideo;
         $lesson->save();
