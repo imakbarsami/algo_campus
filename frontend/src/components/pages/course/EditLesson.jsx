@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import { set, useForm } from 'react-hook-form'
 import { apiUrl, token } from '../../common/Config'
 import JoditEditor from 'jodit-react';
+import { toast } from 'react-hot-toast'
 
 const EditLesson = ({ placeholder }) => {
 
@@ -38,8 +39,36 @@ const EditLesson = ({ placeholder }) => {
     )
     const [loading, setLoading] = React.useState(false)
 
+    //update lesson
     const onSubmit = async (data) => {
-        console.log(data)
+        //console.log(data)
+        await fetch(`${apiUrl}/lessons/${prams.id}`,{
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body:JSON.stringify(data)
+        }).then(res=>res.json())
+        .then(result=>{
+            if(result.status==200){
+                toast.success(result.message)
+                reset({
+                    title:result.data.title,
+                    chapter:result.data.chapter_id,
+                    duration:result.data.duration,
+                    status:result.data.status,
+                    free_preview:result.data.is_free_premium
+                })
+
+            }else{
+                const errors=result.errors
+                Object.keys(errors).forEach(field=>{
+                    setError(field,{message:errors[field][0]})
+                })
+            }
+        })
 
     }
 
@@ -61,6 +90,7 @@ const EditLesson = ({ placeholder }) => {
                 }
             })
     }
+    
     //console.log(chapters)
 
 
@@ -106,7 +136,7 @@ const EditLesson = ({ placeholder }) => {
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                         <div className='card border-0 shadow-lg'>
                                             <div className='card-body p-4'>
-                                                <h4 className='h5 border-bottom pb-3 mb-3'>Course Details</h4>
+                                                <h4 className='h5 border-bottom pb-3 mb-3'>Lesson Details</h4>
                                                 <div className='mb-3'>
                                                     <label className='form-label' htmlFor="title">Title</label>
                                                     <input
@@ -168,6 +198,7 @@ const EditLesson = ({ placeholder }) => {
                                                 <div className='mb-3'>
                                                     <label className='form-label' htmlFor="duration">Description</label>
                                                     <JoditEditor
+                                                    
                                                         ref={editor}
                                                         value={content}
                                                         config={config}

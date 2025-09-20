@@ -64,8 +64,8 @@ class LessonController extends Controller
         }
 
         $validator=Validator::make($request->all(),[
-            'chapter_id'=>'required',
-            'lesson'=>'required',
+            'chapter'=>'required',
+            //'lesson'=>'required',
         ]);
 
         if($validator->fails()){
@@ -75,9 +75,9 @@ class LessonController extends Controller
             ],400);
         }
 
-        $lesson->chapter_id=$request->chapter_id;
-        $lesson->title=$request->lesson;
-        $lesson->is_free_premium=$request->is_free_premium?'yes':'no';
+        $lesson->chapter_id=$request->chapter;
+        $lesson->title=$request->title;
+        $lesson->is_free_premium=$request->free_preview?'yes':'no';
         $lesson->duration=$request->duration;
         $lesson->video=$request->video;
         $lesson->description=$request->description;
