@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chapter;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -31,9 +32,12 @@ class LessonController extends Controller
         $lesson->status=$request->status;
         $lesson->save();
 
+        $chapter=Chapter::where('id',$request->chapter)->with('lessons')->first();
+
         return response()->json([
             'status'=>200,
             'data'=>$lesson,
+            'chapter'=>$chapter,
             'message'=>'Lesson added successfully'
         ],200);
     }
@@ -100,9 +104,13 @@ class LessonController extends Controller
                 'message'=>'Lesson not found',
             ],404);
         }
+        $chapter_id=$lesson->chapter_id;
+
         $lesson->delete();
+        $chapter=Chapter::where('id',$chapter_id)->with('lessons')->first();
         return response()->json([
             'status'=>200,
+            'data'=>$chapter,
             'message'=>'Lesson deleted successfully'
         ],200);
     }

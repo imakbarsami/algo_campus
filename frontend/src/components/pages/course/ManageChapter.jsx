@@ -125,7 +125,7 @@ const ManageChapter = ({ course, pram }) => {
             .then(result=>{
                 if(result.status==200){
                     toast.success(result.message)
-                    setChapters({type:"DELETE_CHAPTER",payload:result.data})
+                    setChapters({type:"UPDATE_CHAPTER",payload:result.data})
                 }
             })
         }
@@ -245,6 +245,7 @@ const ManageChapter = ({ course, pram }) => {
             <CreateLesson
                 showLessonModal={showLessonModal}
                 handleCloseModal={handleCloseModal}
+                setChapters={setChapters}
                 course={course}
             />
         </>

@@ -135,6 +135,7 @@ const EditLesson = ({ placeholder }) => {
                         <div className='col-md-12 mt-5 mb-3'>
                             <div className='d-flex justify-content-between'>
                                 <h2 className='h4 mb-0 pb-0'>Edit Lesson</h2>
+                                <Link className='btn btn-primary' to={`/account/courses/edit/${prams.courseId}`}>Back</Link>
                             </div>
                         </div>
                         <div className='col-lg-3 account-sidebar'>
@@ -258,7 +259,7 @@ const EditLesson = ({ placeholder }) => {
 
                                 </div>
 
-                                <div className='col-md-5'>
+                                <div className='col-md-4'>
                                     <LessonVideo lesson={lesson}/>
                                 </div>
                             </div>
