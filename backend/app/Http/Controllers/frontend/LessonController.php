@@ -80,7 +80,6 @@ class LessonController extends Controller
         $lesson->title=$request->title;
         $lesson->is_free_premium=$request->free_preview?'yes':'no';
         $lesson->duration=$request->duration;
-        $lesson->video=$request->video;
         $lesson->description=$request->description;
         $lesson->status=$request->status;
         $lesson->save();
