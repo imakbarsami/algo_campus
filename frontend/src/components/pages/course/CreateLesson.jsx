@@ -7,10 +7,14 @@ import { apiUrl, token } from '../../common/Config';
 
 const CreateLesson = ({ showLessonModal, handleCloseModal, course }) => {
 
+    //for button disabling
     const [loading, setLoading] = React.useState(false)
+    
     const { register, handleSubmit, formState: { errors }, setError, reset } = useForm()
     //console.log(course)
 
+
+    //store lesson
     const onSubmit = async (data) => {
 
         setLoading(true)

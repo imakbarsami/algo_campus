@@ -15,6 +15,7 @@ const ManageChapter = ({ course, pram }) => {
 
     const { register, handleSubmit, setError, formState: { errors }, reset } = useForm()
     const [loading, setLoading] = React.useState()
+    
     const chapterReducer = (state, action) => {
         switch (action.type) {
             case "SET_CHAPTER":
@@ -32,6 +33,7 @@ const ManageChapter = ({ course, pram }) => {
     }
     const [chapters, setChapters] = React.useReducer(chapterReducer, [])
 
+    //add chapter
     const onSubmit = async (data) => {
         setLoading(true)
         const formData = { ...data, course_id: pram.id }
@@ -86,6 +88,7 @@ const ManageChapter = ({ course, pram }) => {
 
     //console.log(course)
 
+    //delete chapter
     const deleteChapter = async (id) => {
 
         if (confirm("Are you sure you want to delete this chapter?")) {
@@ -128,6 +131,7 @@ const ManageChapter = ({ course, pram }) => {
         }
     }
 
+    //console.log(course)
     React.useEffect(() => {
 
         if (course.chapters) {
@@ -186,7 +190,7 @@ const ManageChapter = ({ course, pram }) => {
                                                 </div>
                                                 <div className="col-md-12">
                                                     {
-                                                        chapter.lessons.map((lesson, index) => {
+                                                       chapter.lessons && chapter.lessons.map((lesson, index) => {
                                                             return (
                                                                 <div key={index} className='card shadow px-3 py-2 mb-2 rounded'>
                                                                     <div className="row">

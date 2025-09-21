@@ -11,6 +11,8 @@ const CreateCourse = () => {
     const {register,handleSubmit,formState:{errors},setError} = useForm()
     const navigate = useNavigate()
 
+
+    //store course
     const onSubmit=async (data)=>{
         //console.log(data)
         await fetch(`${apiUrl}/courses`,{
@@ -35,6 +37,8 @@ const CreateCourse = () => {
         })
 
     }
+
+
     return (
         <Layout>
             <section className='section-4'>

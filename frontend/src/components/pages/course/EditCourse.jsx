@@ -13,7 +13,14 @@ import ManageChapter from './ManageChapter'
 
 const EditCourse = () => {
 
+    const [categories, setCategories] = useState([])
+    const [levels, setLevels] = useState([])
+    const [languages, setLanguages] = useState([])
+    const props = useParams();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false) 
     const [course, setCourse] = useState([])
+
 
     const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
         defaultValues: async () => {
@@ -53,12 +60,7 @@ const EditCourse = () => {
     })
 
     
-    const [categories, setCategories] = useState([])
-    const [levels, setLevels] = useState([])
-    const [languages, setLanguages] = useState([])
-    const props = useParams();
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false) 
+
 
     const onSubmit = async (data) => {
 

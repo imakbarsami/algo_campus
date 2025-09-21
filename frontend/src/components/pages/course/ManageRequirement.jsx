@@ -31,6 +31,7 @@ const ManageRequirement = () => {
         setShowRequirement(true)
     };
 
+    //add requirement
     const onSubmit = async (data) => {
 
         const formData = { ...data, course_id: prams.id }
@@ -65,6 +66,7 @@ const ManageRequirement = () => {
     }
 
 
+    //fetch requirements
     const fetchRequirements = async () => {
 
         await fetch(`${apiUrl}/requirements?course_id=${prams.id}`, {
@@ -83,6 +85,7 @@ const ManageRequirement = () => {
             })
     }
 
+    //delete requirement
     const deleteRequirement = async (id) => {
         if (confirm('Are you sure you want to delete this requirement?')) {
             await fetch(`${apiUrl}/requirements/${id}`, {
@@ -106,6 +109,7 @@ const ManageRequirement = () => {
         }
     }
 
+    //drag and drop
     const handleDragEnd = (result) => {
         if (!result.destination) return;
 
@@ -123,6 +127,7 @@ const ManageRequirement = () => {
 
     //console.log(requirements)
 
+    //sorting order
     const saveOrder = async (UpdateRequirements) => {
         await fetch(`${apiUrl}/sort-requirements`, {
             method: 'POST',

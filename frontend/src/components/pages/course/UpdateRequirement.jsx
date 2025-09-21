@@ -25,6 +25,8 @@ const UpdateRequirement = ({ requirementData, requirements, setRequirements, sho
         }
     }, [requirementData])
 
+
+    //update requirement
     const onSubmit = async(data) => {
 
         setLoading(true)

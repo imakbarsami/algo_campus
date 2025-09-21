@@ -10,9 +10,14 @@ import LessonVideo from './LessonVideo'
 
 const EditLesson = ({ placeholder }) => {
 
+    const [chapters, setChapters] = React.useState([])
+    const prams = useParams()
     const [checked, setChecked] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
     const [description,setDescription]=React.useState('')
     const [lesson,setLesson]=React.useState({})
+
+    
     const { register, handleSubmit, formState: { errors }, reset, setError } = useForm(
         {
             defaultValues:async()=>{
@@ -41,7 +46,6 @@ const EditLesson = ({ placeholder }) => {
             }
         }
     )
-    const [loading, setLoading] = React.useState(false)
 
     //update lesson
     const onSubmit = async (data) => {
@@ -80,9 +84,8 @@ const EditLesson = ({ placeholder }) => {
 
     }
 
-    const [chapters, setChapters] = React.useState([])
-    const prams = useParams()
 
+    //fetch chapter from database
     const fetchChapter = async () => {
         await fetch(`${apiUrl}/chapters?course_id=${prams.courseId}`, {
             method: 'GET',

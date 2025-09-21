@@ -19,6 +19,9 @@ const ManageOutcom = () => {
         setError
     } = useForm()
 
+    const [loading, setLoading] = useState(false)
+    const [outcomes, setOutcomes] = useState([])
+    const prams = useParams()
     const [showOutcome, setShowOutcome] = useState(false);
     const handleClose = () => setShowOutcome(false);
     const [outcomeData, setOutcomeData] = useState()
@@ -27,9 +30,9 @@ const ManageOutcom = () => {
         setShowOutcome(true)
     };
 
-    const [loading, setLoading] = useState(false)
-    const prams = useParams()
 
+
+    //add outcome
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -57,8 +60,8 @@ const ManageOutcom = () => {
 
     }
 
-    const [outcomes, setOutcomes] = useState([])
 
+    //fetch outcomes
     const fetchOutcomes = async () => {
 
         await fetch(`${apiUrl}/outcomes?course_id=${prams.id}`, {
@@ -78,6 +81,8 @@ const ManageOutcom = () => {
             })
     }
 
+
+    //delete outcome
     const deleteOutcome = async (id) => {
 
         if (confirm('Are you sure you want to delete this outcome?')) {
@@ -102,6 +107,7 @@ const ManageOutcom = () => {
     }
 
 
+    //drag and drop
     const handleDragEnd = (result) => {
         if (!result.destination) return;
 
@@ -113,6 +119,8 @@ const ManageOutcom = () => {
         saveOrder(reorderedItems);
     };
 
+
+    //sort order api
     const saveOrder = async (updatedOutcomes) => {
         //console.log(updatedOutcomes)
         await fetch(`${apiUrl}/sort-outcomes`, {
