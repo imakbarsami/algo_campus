@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 import CreateLesson from './CreateLesson';
 import {BsPencilSquare} from 'react-icons/bs'
+import SortLesson from './SortLesson';
 
 
 
@@ -69,6 +70,7 @@ const ManageChapter = ({ course, pram }) => {
     const [showChapter, setShowChapter] = useState(false);
     const handleClose = () => setShowChapter(false);
     const [chapterData, setChapterData] = useState()
+    const [lessons, setLessons] = useState([])
 
     const handleShow = (chapter) => {
         setChapterData(chapter)
@@ -76,11 +78,21 @@ const ManageChapter = ({ course, pram }) => {
     };
 
 
-    //lesson modal
+    //creat lesson modal
     const [showLessonModal, setShowLessonModal] = useState(false);
     const handleCloseModal = () => setShowLessonModal(false);
     const handleShowModal = () => {
         setShowLessonModal(true)
+    };
+
+
+    //sort lesson modal
+    const [showSortLessonModal, setShowSortLessonModal] = useState(false);
+    const handleCloseSortLessonModal = () => setShowSortLessonModal(false);
+
+    const handleShowSortLessonModal = (lesson) => {
+        setShowSortLessonModal(true)
+        setLessons(lesson)
     };
 
 
@@ -183,9 +195,9 @@ const ManageChapter = ({ course, pram }) => {
 
                                                     <div className="d-flex justify-content-between mb-2 mt-4">
                                                         <h4 className="h5">Lessons</h4>
-                                                        <a href="#" className="h6">
+                                                        <Link onClick={()=>handleShowSortLessonModal(chapter.lessons)} className="h6">
                                                             <strong>Reorder Lessons</strong>
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12">
@@ -247,6 +259,13 @@ const ManageChapter = ({ course, pram }) => {
                 handleCloseModal={handleCloseModal}
                 setChapters={setChapters}
                 course={course}
+            />
+
+            <SortLesson
+              showSortLessonModal={showSortLessonModal}
+              handleCloseSortLessonModal={handleCloseSortLessonModal}
+              lessonData={lessons}
+              setChapters={setChapters}
             />
         </>
     )

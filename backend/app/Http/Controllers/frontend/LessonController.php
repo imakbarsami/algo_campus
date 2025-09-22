@@ -44,7 +44,7 @@ class LessonController extends Controller
 
     public function edit($id){
 
-        $lesson=Lesson::find($id);
+        $lesson=Lesson::orderBy('sort_order')->find($id);
         
         if(!$lesson){
             return response()->json([
@@ -155,6 +155,25 @@ class LessonController extends Controller
             'status'=>200,
             'data'=>$lesson,
             'message'=>'Video uploaded successfully'
+        ],200);
+    }
+
+    public function sortLesson(Request $request){
+
+        $chapter_id='';
+        if($request->lessons){
+        foreach($request->lessons as $key=>$lesson){
+            $chapter_id=$lesson['chapter_id'];
+            Lesson::where('id',$lesson['id'])->update(['sort_order'=>$key]);
+        }
+      }
+
+        $chapter=Chapter::where('id',$chapter_id)->with('lessons')->first();
+
+        return response()->json([
+            'status'=>200,
+            'chapter'=>$chapter,
+            'message'=>'Lesson Sorted Successfully'
         ],200);
     }
 }
