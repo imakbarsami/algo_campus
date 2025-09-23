@@ -162,6 +162,7 @@ const EditCourse = () => {
                         <div className='col-md-12 mt-5 mb-3'>
                             <div className='d-flex justify-content-between'>
                                 <h2 className='h4 mb-0 pb-0'>Edit Course</h2>
+                                <div>
                                 {
                                     course.status==0 &&
                                     <Link onClick={()=>changeStatus(course)} className='btn btn-secondary'>Publish</Link>
@@ -169,7 +170,12 @@ const EditCourse = () => {
                                 {
                                     course.status==1 &&
                                     <Link onClick={()=>changeStatus(course)} className='btn btn-primary'>Unpublish</Link>
+                                    
                                 }
+                                 <Link to={`/account/my-courses`} className='btn btn-danger ms-2'>Back</Link>
+                                 </div>
+
+                               
                                 
                             </div>
                         </div>
