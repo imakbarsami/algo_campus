@@ -121,6 +121,27 @@ const EditCourse = () => {
 
 
     }
+
+    const changeStatus=async(course)=>{
+
+        const status=course.status==0?1:0
+        
+        await fetch(`${apiUrl}/change-course-status/${course.id}`,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/json',
+                'Authorization':`Bearer ${token}`
+            },
+            body:JSON.stringify({status:status})
+        }).then(res=>res.json())
+        .then(result=>{
+            if(result.status==200){
+                toast.success(result.message)
+                setCourse({...course,status:result.course.status})
+            }
+        })
+    }
     
     useEffect(() => {
         coursesMetaData()
@@ -141,6 +162,15 @@ const EditCourse = () => {
                         <div className='col-md-12 mt-5 mb-3'>
                             <div className='d-flex justify-content-between'>
                                 <h2 className='h4 mb-0 pb-0'>Edit Course</h2>
+                                {
+                                    course.status==0 &&
+                                    <Link onClick={()=>changeStatus(course)} className='btn btn-secondary'>Publish</Link>
+                                }
+                                {
+                                    course.status==1 &&
+                                    <Link onClick={()=>changeStatus(course)} className='btn btn-primary'>Unpublish</Link>
+                                }
+                                
                             </div>
                         </div>
                         <div className='col-lg-3 account-sidebar'>

@@ -23,6 +23,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::put('/courses/{id}',[CourseController::class, 'update']);
     Route::get('/courses/meta-data', [CourseController::class, 'metaData']);
     Route::post('/save-course-image/{id}',[CourseController::class, 'saveCourseImage']);
+    Route::post('/change-course-status/{id}',[CourseController::class, 'changeStatus']);
 
 
     //outcome routes
