@@ -24,6 +24,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/courses/meta-data', [CourseController::class, 'metaData']);
     Route::post('/save-course-image/{id}',[CourseController::class, 'saveCourseImage']);
     Route::post('/change-course-status/{id}',[CourseController::class, 'changeStatus']);
+    Route::delete('/courses/{id}',[CourseController::class, 'destroy']);
 
 
     //outcome routes

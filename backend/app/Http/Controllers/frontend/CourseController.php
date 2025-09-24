@@ -4,8 +4,10 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Language;
+use App\Models\Lesson;
 use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -188,6 +190,50 @@ class CourseController extends Controller
             'status'=>200,
             'course'=>$course,
             'message'=>$message
+        ]);
+    }
+
+    public function destroy(Request $request,$id){
+
+        $course=Course::where('id',$id)->where('user_id',$request->user()->id)->first();
+
+        if(!$course){
+            return response()->json([
+                'status'=>404,
+                'message'=>'Course Not Found'
+            ],404);
+        }
+
+        $chapters=Chapter::where('course_id',$course->id)->get();
+
+        //remove lesson videos
+       if($chapters){
+            foreach($chapters as $chapter){
+                $lessons=Lesson::where('chapter_id',$chapter->id)->get();
+                if($lessons){
+                    foreach($lessons as $lesson){
+                        if(File::exists(public_path('uploads/courses/videos/'.$lesson->video))){
+                            File::delete(public_path('uploads/courses/videos/'.$lesson->video));
+                        }
+                    }
+                }
+            }
+       }
+
+
+        //remove course images
+        if(File::exists(public_path('uploads/courses/small/'.$course->image))){
+            File::delete(public_path('uploads/courses/small/'.$course->image));
+        }
+        if(File::exists(public_path('uploads/courses/'.$course->image))){
+            File::delete(public_path('uploads/courses/'.$course->image));
+        }
+
+        $course->delete();
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'Course Deleted Successfully'
         ]);
     }
 }
