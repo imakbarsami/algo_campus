@@ -2,13 +2,19 @@ import React from 'react'
 import Layout from './Layout'
 import { Link } from 'react-router-dom'
 
-const EditCourse = ({ course }) => {
+const EditCourse = ({ course,deleteCourse }) => {
     return (
         <>
             <div className="col-md-4">
                 <div className='card border-0'>
                     <div className='card-img-top'>
-                        <img src={course.course_small_image} alt="" className='img-fluid' />
+                        {course.course_small_image &&
+                            <img src={course.course_small_image} alt="" className='img-fluid' />
+                        }
+
+                        {
+                            !course.course_small_image  && <img src={`https://placehold.co/600x350?text=${course.title}`} alt="" className='img-fluid'/>
+                        }
                     </div>
                     <div className='card-body'>
                         <div className="card-title ">
@@ -53,6 +59,7 @@ const EditCourse = ({ course }) => {
                         <div className="d-flex py-2 justify-content-between align-items-center">
                             <div className="add-to-cart">
                                 <Link to={`/account/courses/edit/${course.id}`} className="btn btn-primary">Edit</Link>
+                                <Link onClick={()=>deleteCourse(course.id)} className="btn btn-danger ms-2">Delete</Link>
                             </div>
                         </div>
                     </div>
