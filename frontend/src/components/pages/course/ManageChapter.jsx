@@ -274,6 +274,7 @@ const ManageChapter = ({ course, pram }) => {
                 handleCloseModal={handleCloseModal}
                 setChapters={setChapters}
                 course={course}
+                chapters={chapters}
             />
 
             <SortLesson
@@ -288,6 +289,7 @@ const ManageChapter = ({ course, pram }) => {
                 handleCloseSortChapterModal={handleCloseSortChapterModal}
                 setChapters={setChapters}
                 course={course}
+                chapters={chapters}
             />
         </>
     )

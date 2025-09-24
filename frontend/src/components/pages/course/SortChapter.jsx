@@ -5,7 +5,7 @@ import {apiUrl,token} from '../../common/Config'
 import {toast} from 'react-hot-toast'
 
 
-const SortChapter = ({ showSortChapterModal, handleCloseSortChapterModal,setChapters,course }) => {
+const SortChapter = ({ showSortChapterModal, handleCloseSortChapterModal,setChapters,course,chapters }) => {
 
     const [chapterData, setChapterData] = React.useState([]);
 
@@ -41,10 +41,10 @@ const SortChapter = ({ showSortChapterModal, handleCloseSortChapterModal,setChap
     }
 
     useEffect(()=>{
-        if(course){
-            setChapterData(course.chapters)
+        if(chapters){
+            setChapterData(chapters)
         }
-    },[course])
+    },[chapters])
 
 
     return (

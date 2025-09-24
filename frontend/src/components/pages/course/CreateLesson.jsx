@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-hot-toast';
 import { apiUrl, token } from '../../common/Config';
 
-const CreateLesson = ({ showLessonModal, handleCloseModal,setChapters, course }) => {
+const CreateLesson = ({ showLessonModal, handleCloseModal,setChapters, course,chapters }) => {
 
     //for button disabling
     const [loading, setLoading] = React.useState(false)
@@ -60,7 +60,7 @@ const CreateLesson = ({ showLessonModal, handleCloseModal,setChapters, course })
                                 className={`form-select ${errors.chapter && 'is-invalid'}`}>
                                 <option value="">Select a Chapter</option>
                                 {
-                                    course.chapters && course.chapters.map(chapter => {
+                                    chapters && chapters.map(chapter => {
                                         return <option key={chapter.id} value={chapter.id}>{chapter.title}</option>
                                     })
                                 }
