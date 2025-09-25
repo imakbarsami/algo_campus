@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AccountController::class, 'register']);
 Route::post('/login',[AccountController::class, 'authenticate']);
-Route::get('/fetch-categroes',[HomeController::class, 'fetchCategories']);
+Route::get('/fetch-categories',[HomeController::class, 'fetchCategories']);
 Route::get('/fetch-courses',[HomeController::class, 'fetchCourses']);
 
 Route::get('/user', function (Request $request) {

@@ -1,7 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Course from './Course'
+import { apiUrl } from './Config'
 
 const FeaturedCourses = () => {
+
+    const [courses, setCourses] = React.useState([])
+
+    useEffect(()=>{
+
+        fetch(`${apiUrl}/fetch-courses`,{
+            method:'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(res=>res.json())
+        .then(result=>{
+            if(result.status==200){
+                setCourses(result.data)
+                //console.log(result)
+            }else{
+                console.log('something went wrong')
+            }
+        })
+
+    },[])
+
+
     return (
         <section className='section-3 my-5'>
             <div className="container">
@@ -10,57 +35,17 @@ const FeaturedCourses = () => {
                     <p>Discover courses designed to help you excel in your professional and personal growth.</p>
                 </div>
                 <div className="row gy-4">
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />
-
-                    <Course
-                        title='The complete 2025 Web Development Bootcamp'
-                        level='Advance'
-                        enrolled='10'
-                        customClasses="col-lg-3 col-md-6"
-                    />   s
-
+                    {
+                        courses && courses.map(course=>{
+                            return(
+                                <Course
+                                    key={course.id}
+                                    course={course}
+                                    customClasses="col-lg-3 col-md-6"
+                                />
+                            )
+                        })
+                    }
                 </div>
             </div>
         </section>
