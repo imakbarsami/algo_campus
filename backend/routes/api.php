@@ -15,6 +15,9 @@ Route::post('/register', [AccountController::class, 'register']);
 Route::post('/login',[AccountController::class, 'authenticate']);
 Route::get('/fetch-categories',[HomeController::class, 'fetchCategories']);
 Route::get('/fetch-courses',[HomeController::class, 'fetchCourses']);
+Route::get('/get-courses',[HomeController::class, 'courses']);
+Route::get('/fetch-levels',[HomeController::class, 'fetchLevels']);
+Route::get('/fetch-languages',[HomeController::class, 'fetchLanguages']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
