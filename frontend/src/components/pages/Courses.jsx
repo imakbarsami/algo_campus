@@ -2,17 +2,36 @@ import React from 'react'
 import Course from '../common/Course'
 import Layout from '../common/Layout'
 import { apiUrl } from '../common/Config'
+import { Link, useSearchParams } from 'react-router-dom'
+import Loader from '../common/Loader'
+import NotFound from '../common/NotFound'
 
 const Courses = () => {
 
+  const [searchPrams,setSearchPrams]=useSearchParams()
   const [categories, setCategories] = React.useState([])
   const [levels, setLevels] = React.useState([])
   const [languages, setLanguages] = React.useState([])
   const [courses, setCourses] = React.useState([])
-  const [loading,setLoading]=React.useState([])
-  const [categoryChecked, setCategoryChecked] = React.useState([])
-  const [levelChecked, setLevelChecked] = React.useState([])
-  const [languageChecked, setLanguageChecked] = React.useState([])
+  const [loading,setLoading]=React.useState()
+  const [keyword,setKeyword]=React.useState('')
+  const [sort, setSort]=React.useState('desc')
+
+  //checked category states
+  const [categoryChecked, setCategoryChecked] = React.useState(()=>{
+    const category=searchPrams.get('category')
+    return category ? category.split(',') : []
+  })
+  const [levelChecked, setLevelChecked] = React.useState(()=>{
+    const level=searchPrams.get('level')
+    return level ? level.split(',') : []
+  })
+
+
+  const [languageChecked, setLanguageChecked] = React.useState(()=>{
+    const language=searchPrams.get('language')
+    return language ? language.split(',') : []
+  })
 
 
   //fetch categories
@@ -53,6 +72,7 @@ const Courses = () => {
         }
     })
   }
+  
 
   //fetch languages
   const fetchLanguages=async()=>{
@@ -76,6 +96,7 @@ const Courses = () => {
   //fetch courses
   const fetchCourses=async()=>{
 
+    setLoading(true)
     let search=[]
     let prams=''
 
@@ -90,9 +111,19 @@ const Courses = () => {
     if(languageChecked.length>0){
       search.push(['language',languageChecked])
     }
+
+    if(keyword.length>0){
+      search.push(['keyword',keyword])
+    }else{
+      setKeyword('')
+    }
+
+    search.push(['sort',sort])
+   
     
     if(search.length>0){
       prams=new URLSearchParams(search)
+      setSearchPrams(prams)
     }
 
     await fetch(`${apiUrl}/get-courses?${prams}`,{
@@ -103,6 +134,7 @@ const Courses = () => {
         }
     }).then(res=>res.json())
     .then(result=>{
+        setLoading(false)
         if(result.status==200){
             setCourses(result.data)
             //console.log(result)
@@ -110,6 +142,17 @@ const Courses = () => {
             console.log('something went wrong')
         }
     })
+  }
+
+  const clearFilter=()=>{
+    setCategoryChecked([])
+    setLevelChecked([])
+    setLanguageChecked([])
+    setKeyword('')
+    setSort('desc')
+    setSearchPrams('')
+
+    document.querySelectorAll('.form-check-input').forEach(element=>element.checked=false)
   }
 
   const hadnleCategory=(e)=>{
@@ -146,7 +189,7 @@ const Courses = () => {
     fetchLevels()
     fetchLanguages()
     fetchCourses()
-  },[categoryChecked,levelChecked,languageChecked])
+  },[categoryChecked,levelChecked,languageChecked,keyword,sort])
 
 
   return (
@@ -162,7 +205,16 @@ const Courses = () => {
           <div className='col-lg-3'>
             <div className='sidebar mb-5 card border-0'>
               <div className='card-body shadow'>
-                <input type="text" className='form-control' placeholder='Search by keyword' />
+                <div className="mb-3 input-group">
+                  <input 
+                    value={keyword}
+                    onChange={(e)=>setKeyword(e.target.value)}
+                    type="text" 
+                    placeholder='Seach by Keyword' 
+                    className="form-control" 
+                  />
+                  <button className='btn btn-primary btn-sm'>Search</button>
+                </div>
                 <div className='pt-3'>
                   <h3 className='h5 mb-2'>Category</h3>
                   <ul>
@@ -172,6 +224,7 @@ const Courses = () => {
                            <li key={category.id}>
                             <div className="form-check">
                               <input 
+                                defaultChecked={searchPrams.get('category')?searchPrams.get('category').includes(category.id):false}
                                 onClick={(e)=>hadnleCategory(e)}
                                 className="form-check-input" 
                                 type="checkbox" 
@@ -197,6 +250,7 @@ const Courses = () => {
                            <li key={level.id}>
                             <div className="form-check">
                               <input 
+                                defaultChecked={searchPrams.get('level')?searchPrams.get('level').includes(level.id):false}
                                 onClick={e=>handleLevel(e)}
                                 className="form-check-input" 
                                 type="checkbox" 
@@ -222,6 +276,7 @@ const Courses = () => {
                            <li key={language.id}>
                             <div className="form-check">
                               <input 
+                                defaultChecked={searchPrams.get('language')?searchPrams.get('language').includes(language.id):false}
                                 onClick={e=>handleLanguage(e)}
                                 className="form-check-input" 
                                 type="checkbox" 
@@ -238,7 +293,7 @@ const Courses = () => {
                     }
                   </ul>
                 </div>
-                <a href="" className='clear-filter'>Clear All Filters</a>
+                <Link onClick={()=>clearFilter()} className='clear-filter'>Clear All Filters</Link>
               </div>
             </div>
           </div>
@@ -249,15 +304,24 @@ const Courses = () => {
                   {/* 10 courses found */}
                 </div>
                 <div>
-                  <select name="" id="" className='form-select'>
-                    <option value="0">Newset First</option>
-                    <option value="1">Oldest First</option>
+                  <select 
+                    onChange={(e)=>setSort(e.target.value)}
+                    value={sort}
+                    className='form-select'>
+                    <option value="desc">Newset First</option>
+                    <option value="asc">Oldest First</option>
                   </select>
                 </div>
               </div>
               <div className="row gy-4">
                 {
-                  courses && courses.map(course=>(
+                  loading==false && courses.length==0 && <NotFound/>
+                }
+                {
+                  loading==true && <Loader/>
+                }
+                {
+                  loading==false && courses && courses.map(course=>(
                        <Course
                         key={course.id}
                         course={course}
