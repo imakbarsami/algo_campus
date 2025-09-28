@@ -24,4 +24,20 @@ class Course extends Model
         return $this->belongsTo(Level::class);
     }
 
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function language(){
+        return $this->belongsTo(Language::class);
+    }
+
+    public function outcomes(){
+        return $this->hasMany(Outcome::class)->orderBy('sort_order','asc');
+    }
+
+    public function requirements(){
+        return $this->hasMany(Requirment::class)->orderBy('sort_order','asc');
+    }
+
 }

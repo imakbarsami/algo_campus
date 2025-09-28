@@ -106,4 +106,47 @@ class HomeController extends Controller
         ],200);
     }
 
+    public function course_detail($id){
+
+        $course=Course::where(['id'=>$id,'status'=>1])
+                      ->with([
+                        'level',
+                        'category',
+                        'language',
+                        'outcomes',
+                        'requirements',
+                        'chapters'=>function($q){
+                            $q->withCount(['lessons'=>function($q){
+                                $q->where('status',1);
+                                $q->whereNotNull('video');
+                            }]);
+                            $q->withSum(['lessons'=>function($q){
+                                $q->where('status',1);
+                                $q->whereNotNull('video');
+                            }],'duration');  
+                        },
+                        'chapters.lessons'=>function($q){
+                            $q->where('status',1);
+                            $q->whereNotNull('video');
+                        }
+                      ])->first();
+
+        $totalDuration=$course->chapters->sum('lessons_sum_duration');
+        $totalLessons=$course->chapters->sum('lessons_count');
+        $course->total_duration=$totalDuration;
+        $course->total_lessons=$totalLessons;
+
+        if(!$course){
+            return response()->json([
+                'status'=>404,
+                'message'=>'Course not found'
+            ],404);
+        }
+
+        return response()->json([
+            'status'=>200,
+            'data'=>$course
+        ],200);
+    }
+
 }

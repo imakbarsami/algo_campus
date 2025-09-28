@@ -1,32 +1,69 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import Layout from '../common/Layout'
 import { Rating } from 'react-simple-star-rating'
 import ReactPlayer from 'react-player'
 import { Accordion, Badge, ListGroup, Card } from "react-bootstrap";
+import { apiUrl,convertMinutesToHours } from '../common/Config'
+import { Link, useParams } from 'react-router-dom';
+import { LuMonitorPlay } from "react-icons/lu";
+import Loader from '../common/Loader';
 
 
 const Details = () => {
 
   const [rating, setRating] = useState(4.0)
+  const [course, setCourse] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const params=useParams()
+
+  const courseDetails=()=>{
+    setLoading(true)
+    fetch(`${apiUrl}/course/${params.id}`,{
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      }
+    }).then(res=>res.json())
+    .then(result=>{
+      setLoading(false)
+      if(result.status==200){
+        setCourse(result.data)
+      }
+    })
+  }
+
+  
+  React.useEffect(()=>{
+    courseDetails()
+  },[])
+
+  //console.log(course.level.name);
+
   return (
     <Layout>
+      {
+        loading && <div className="mt-5"><Loader/></div>
+      }
+      {
+        !loading && course && 
       <div className='container pb-5 pt-3'>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item"><a href="/">Home</a></li>
             <li className="breadcrumb-item"><a href="/courses">Courses</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Web Development Bootcamp 2025</li>
+            <li className="breadcrumb-item active" aria-current="page">{course.title}</li>
           </ol>
         </nav>
         <div className='row my-5'>
           <div className='col-lg-8'>
-            <h2>Web Development Bootcamp 2025</h2>
+            <h2>{course.title}</h2>
             <div className='d-flex'>
               <div className='mt-1'>
-                <span className="badge bg-green">Programming</span>
+                <span className="badge bg-green">{course.category.name}</span>
               </div>
               <div className='d-flex ps-3'>
-                <div className="text pe-2 pt-1">5.0</div>
+                <div className="text pe-2 pt-1">0.0</div>
                 <Rating initialValue={rating} size={20} />
               </div>
             </div>
@@ -37,42 +74,38 @@ const Details = () => {
                         </div> */}
               <div className="col">
                 <span className="text-muted d-block">Level</span>
-                <span className="fw-bold">Advance</span>
+                <span className="fw-bold">{course.level.name}</span>
               </div>
               <div className="col">
                 <span className="text-muted d-block">Students</span>
-                <span className="fw-bold">150,668</span>
+                <span className="fw-bold">0</span>
               </div>
               <div className="col">
                 <span className="text-muted d-block">Language</span>
-                <span className="fw-bold">English</span>
+                <span className="fw-bold">{course.language.name}</span>
               </div>
             </div>
             <div className='row'>
               <div className='col-md-12 mt-4'>
                 <div className='border bg-white rounded-3 p-4'>
                   <h3 className='mb-3  h4'>Overview</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Suspendisse potenti. Vivamus tincidunt, eros et tincidunt tincidunt, libero turpis posuere urna, ut consectetur justo erat a arcu. Fusce eget risus id mauris tincidunt posuere. Curabitur euismod, magna ut tristique venenatis, erat velit venenatis felis, at varius odio elit nec augue. Sed et sapien vitae justo dapibus dictum. </p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Suspendisse potenti. Vivamus tincidunt, eros et tincidunt tincidunt, libero turpis posuere urna, ut consectetur justo erat a arcu. </p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Suspendisse potenti. Vivamus tincidunt, eros et tincidunt tincidunt, libero turpis posuere urna, ut consectetur justo erat a arcu. Fusce eget risus id mauris tincidunt posuere. </p>
-                </div>
+                    <p>{course.description}</p>
+                  </div>
               </div>
               <div className='col-md-12 mt-4'>
                 <div className='border bg-white rounded-3 p-4'>
                   <h3 className='mb-3 h4'>What you will learn</h3>
                   <ul className="list-unstyled mt-3">
-                    <li className="d-flex align-items-center mb-2">
-                      <span className="text-success me-2">&#10003;</span>
-                      <span>Obtain a strong understanding on the fundamentals of programming</span>
-                    </li>
-                    <li className="d-flex align-items-center mb-2">
-                      <span className="text-success me-2">&#10003;</span>
-                      <span>Write your own independent programs in Python</span>
-                    </li>
-                    <li className="d-flex align-items-center">
-                      <span className="text-success me-2">&#10003;</span>
-                      <span>Understand the basics of Python language</span>
-                    </li>
+                    {
+                      course.outcomes && course.outcomes.map((outcome,index)=>{
+                        return (
+                          <li key={index} className="d-flex align-items-center mb-2">
+                            <span className="text-success me-2">&#10003;</span>
+                            <span>{outcome.text}</span>
+                          </li>
+                        )
+                      })
+                    }
                   </ul>
                 </div>
               </div>
@@ -81,14 +114,16 @@ const Details = () => {
                 <div className='border bg-white rounded-3 p-4'>
                   <h3 className='mb-3 h4'>Requirements</h3>
                   <ul className="list-unstyled mt-3">
-                    <li className="d-flex align-items-center mb-2">
-                      <span className="text-success me-2">&#10003;</span>
-                      <span>Access to PC running on windows</span>
-                    </li>
-                    <li className="d-flex align-items-center mb-2">
-                      <span className="text-success me-2">&#10003;</span>
-                      <span>Internet connection to setup development network.</span>
-                    </li>
+                    {
+                      course.requirements && course.requirements.map((requirement,index)=>{
+                        return(
+                          <li key={index} className="d-flex align-items-center mb-2">
+                          <span className="text-success me-2">&#10003;</span>
+                          <span>{requirement.text}</span>
+                          </li>
+                        )
+                      })
+                    } 
                   </ul>
                 </div>
               </div>
@@ -97,126 +132,52 @@ const Details = () => {
                 <div className='border bg-white rounded-3 p-4'>
                   <h3 className="h4 mb-3">Course Structure</h3>
                   <Accordion defaultActiveKey="0" id="courseAccordion">
-                    {/* Module 1 */}
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>
-                        Module 1: Introduction to Web Development <span className="ms-3 text-muted">(2 lectures - 3 hours)</span>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <ListGroup>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            What is Web Development?
-                            <Badge bg="primary">
-                              <a href="#" className="text-white text-decoration-none">Preview</a>
-                            </Badge>
-                            <span className="text-muted">1 hour</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Tools and Setup for Web Development
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                        </ListGroup>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    {/* Module 2 */}
-                    <Accordion.Item eventKey="1">
-                      <Accordion.Header>
-                        Module 2: HTML & CSS Basics <span className="ms-3 text-muted">(4 lectures - 6 hours)</span>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <ListGroup>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Introduction to HTML
-                            <span className="text-muted">1.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Building a Basic Webpage
-                            <Badge bg="primary">
-                              <a href="#" className="text-white text-decoration-none">Preview</a>
-                            </Badge>
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Introduction to CSS
-                            <span className="text-muted">1.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Responsive Design Basics
-                            <span className="text-muted">1 hour</span>
-                          </ListGroup.Item>
-                        </ListGroup>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    {/* Module 3 */}
-                    <Accordion.Item eventKey="2">
-                      <Accordion.Header>
-                        Module 3: JavaScript Basics <span className="ms-3 text-muted">(5 lectures - 8 hours)</span>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <ListGroup>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            What is JavaScript?
-                            <span className="text-muted">1 hour</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Variables and Data Types
-                            <span className="text-muted">1.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Functions in JavaScript
-                            <span className="text-muted">1.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            DOM Manipulation Basics
-                            <Badge bg="primary">
-                              <a href="#" className="text-white text-decoration-none">Preview</a>
-                            </Badge>
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Events in JavaScript
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                        </ListGroup>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    {/* Module 4 */}
-                    <Accordion.Item eventKey="3">
-                      <Accordion.Header>
-                        Module 4: Building a Full-Stack Application <span className="ms-3 text-muted">(6 lectures - 15 hours)</span>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <ListGroup>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Setting Up a Backend with Node.js
-                            <span className="text-muted">3 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Introduction to Express.js
-                            <span className="text-muted">2.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Creating RESTful APIs
-                            <span className="text-muted">2.5 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Introduction to MongoDB
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Building the Frontend with React
-                            <Badge bg="primary">
-                              <a href="#" className="text-white text-decoration-none">Preview</a>
-                            </Badge>
-                            <span className="text-muted">3 hours</span>
-                          </ListGroup.Item>
-                          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                            Deploying the Application
-                            <span className="text-muted">2 hours</span>
-                          </ListGroup.Item>
-                        </ListGroup>
-                      </Accordion.Body>
-                    </Accordion.Item>
+                    {
+                      course.chapters && course.chapters.map((chapter,index)=>{
+                        return(
+                          <Accordion.Item eventKey={index} key={index}>
+                          <Accordion.Header>
+                            {chapter.title} <span className="ms-3 text-muted">({chapter.lessons_count} lectures - {convertMinutesToHours(chapter.lessons_sum_duration)})</span>
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <ListGroup>
+                              {
+                                chapter.lessons && chapter.lessons.map((lesson,index)=>{
+                                  return (
+                                       <ListGroup.Item  key={index}>
+                                          <div className='row'>
+
+                                            <div className="col-md-9">
+                                              <LuMonitorPlay className='me-2'/>
+                                              {lesson.title}
+
+                                            </div>
+
+                                            <div className='col-md-3'>
+                                              <div className="d-flex justify-content-end">
+                                               { lesson.is_free_premium=='yes' && (
+                                                    <Badge bg="primary">
+                                                      <Link className="text-white text-decoration-none">Preview</Link>
+                                                    </Badge>
+                                                )}
+                                              
+                                              <span className="text-muted ms-2">{convertMinutesToHours(lesson.duration)}</span>
+                                              </div>
+                                                
+                                            </div>
+                                          </div>
+                                        </ListGroup.Item>  
+                                  )
+                                })
+                              }
+                                                  
+                            </ListGroup>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                        )
+                      })
+                    }
+                   
                   </Accordion>
                 </div>
               </div>
@@ -255,9 +216,15 @@ const Details = () => {
           </div>
           <div className='col-lg-4'>
             <div className='border rounded-3 bg-white p-4 shadow-sm'>
-              <Card.Body>
-                <h3 className="fw-bold">$100</h3>
-                <div className="text-muted text-decoration-line-through">$200</div>
+              <Card.Img src={course.course_small_image} className='rounded'/>
+              <Card.Body className='mt-3'>
+                <h3 className="fw-bold">${course.price}</h3>
+                {
+                  course.cross_price && (
+                     <div className="text-muted text-decoration-line-through">${course.cross_price}</div>
+                  )
+                }
+               
                 {/* Buttons */}
                 <div className="mt-4">
                   <button className="btn btn-primary w-100">
@@ -287,6 +254,7 @@ const Details = () => {
           </div>
         </div>
       </div>
+     }
     </Layout>
   )
 }
