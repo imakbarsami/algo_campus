@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Language;
 use App\Models\Level;
 use Illuminate\Http\Request;
@@ -109,6 +110,7 @@ class HomeController extends Controller
     public function course_detail($id){
 
         $course=Course::where(['id'=>$id,'status'=>1])
+                      ->withCount('chapters')
                       ->with([
                         'level',
                         'category',
@@ -147,6 +149,35 @@ class HomeController extends Controller
             'status'=>200,
             'data'=>$course
         ],200);
+    }
+
+    public function enrollCourse(Request $request){
+
+        $course=Course::where(['id'=>$request->course_id])->first();
+        if(!$course){
+            return response()->json([
+                'status'=>404,
+                'message'=>'Course not found'
+            ],404);
+        }
+
+        $alreadyEnroll=Enrollment::where(['user_id'=>$request->user()->id,'course_id'=>$request->course_id])->count();
+        if($alreadyEnroll>0){
+            return response()->json([
+                'status'=>409,
+                'message'=>'You are already enrolled in this course'
+            ],409);
+        }
+
+        $enrollment=new Enrollment;
+        $enrollment->user_id=$request->user()->id;
+        $enrollment->course_id=$request->course_id;
+        $enrollment->save();
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'You have successfully enrolled in this course'
+        ],200); 
     }
 
 }

@@ -3,10 +3,12 @@ import Layout from '../common/Layout'
 import { Rating } from 'react-simple-star-rating'
 import ReactPlayer from 'react-player'
 import { Accordion, Badge, ListGroup, Card } from "react-bootstrap";
-import { apiUrl,convertMinutesToHours } from '../common/Config'
-import { Link, useParams } from 'react-router-dom';
+import { apiUrl,convertMinutesToHours, token } from '../common/Config'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { LuMonitorPlay } from "react-icons/lu";
 import Loader from '../common/Loader';
+import FreePreview from '../common/FreePreview';
+import { toast } from 'react-hot-toast';
 
 
 const Details = () => {
@@ -14,7 +16,19 @@ const Details = () => {
   const [rating, setRating] = useState(4.0)
   const [course, setCourse] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate=useNavigate()
   const params=useParams()
+
+
+  //free preview modal
+  const [lessonData, setLessonData] = useState(null)
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (lesson) => {
+    setShow(true)
+    setLessonData(lesson)
+  };
+
 
   const courseDetails=()=>{
     setLoading(true)
@@ -33,6 +47,40 @@ const Details = () => {
     })
   }
 
+  //enroll course
+  const handleEnroll=async()=>{
+
+    var data={
+      course_id:course.id
+    }
+
+    await fetch(`${apiUrl}/enroll-course`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json',
+        'Authorization':`Bearer ${token}`
+      },
+      body:JSON.stringify(data)
+    }).then(async res=>{
+       const result=await res.json()
+       return {
+          status:res.status,
+          data:result
+       }
+    })
+    .then(({status,data})=>{
+      if(status==200){
+        toast.success(data.message)
+      }else if(status==401){
+        toast.error("Unauthorized! Please login first")
+        navigate('/account/login')
+      }else{
+        toast.error(data.message)
+      }
+    })
+  }
+
   
   React.useEffect(()=>{
     courseDetails()
@@ -42,6 +90,13 @@ const Details = () => {
 
   return (
     <Layout>
+      {
+        lessonData && <FreePreview
+                        show={show} 
+                        handleClose={handleClose} 
+                        lessonData={lessonData}
+                      />
+      }
       {
         loading && <div className="mt-5"><Loader/></div>
       }
@@ -131,6 +186,9 @@ const Details = () => {
               <div className='col-md-12 mt-4'>
                 <div className='border bg-white rounded-3 p-4'>
                   <h3 className="h4 mb-3">Course Structure</h3>
+                  <p>
+                    {course.chapters_count} Chapters • {course.total_lessons} Lectures • {convertMinutesToHours(course.total_duration)} 
+                  </p>
                   <Accordion defaultActiveKey="0" id="courseAccordion">
                     {
                       course.chapters && course.chapters.map((chapter,index)=>{
@@ -157,7 +215,7 @@ const Details = () => {
                                               <div className="d-flex justify-content-end">
                                                { lesson.is_free_premium=='yes' && (
                                                     <Badge bg="primary">
-                                                      <Link className="text-white text-decoration-none">Preview</Link>
+                                                      <Link onClick={()=>handleShow(lesson)} className="text-white text-decoration-none">Preview</Link>
                                                     </Badge>
                                                 )}
                                               
@@ -227,8 +285,8 @@ const Details = () => {
                
                 {/* Buttons */}
                 <div className="mt-4">
-                  <button className="btn btn-primary w-100">
-                    <i className="bi bi-ticket"></i> Buy Now
+                  <button onClick={()=>handleEnroll()} className="btn btn-primary w-100">
+                    <i className="bi bi-ticket"></i> Enroll
                   </button>
                 </div>
               </Card.Body>
