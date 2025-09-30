@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +81,16 @@ class AccountController extends Controller
         return response()->json([
             'status'=>200,
             'courses'=>$courses,
+        ],200);
+    }
+
+    public function enrollments(Request $request){
+
+        $enrollments=Enrollment::where('user_id',$request->user()->id)->with(['course','course.level'])->get();
+
+        return response()->json([
+            'status'=>200,
+            'data'=>$enrollments,
         ],200);
     }
 }
