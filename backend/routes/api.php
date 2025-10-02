@@ -72,6 +72,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     //watch course
     Route::get('/watch-course/{id}',[AccountController::class,'watchCourse']);
     Route::post('/save-activity',[AccountController::class,'saveUserActivity']);
+    Route::post('/mark-as-complete',[AccountController::class,'markAsComplete']);
 
     
 });
