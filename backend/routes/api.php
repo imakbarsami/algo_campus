@@ -74,5 +74,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/save-activity',[AccountController::class,'saveUserActivity']);
     Route::post('/mark-as-complete',[AccountController::class,'markAsComplete']);
 
+    //rating course
+    Route::post('/save-rating',[AccountController::class,'saveRating']);
+
     
 });

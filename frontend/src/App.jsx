@@ -16,6 +16,7 @@ import { RequiredAuth } from './components/common/RequiredAuth.jsx';
 import CreateCourse from './components/pages/course/CreateCourse.jsx';
 import EditCourse from './components/pages/course/EditCourse.jsx';
 import EditLesson from './components/pages/course/EditLesson.jsx';
+import LeaveRating from './components/pages/course/LeaveRating.jsx';
 
 
 function App() {
@@ -42,6 +43,12 @@ function App() {
           <Route path='/account/my-learning' element={
             <RequiredAuth>
               <MyLearning />
+            </RequiredAuth>
+          }/>
+
+          <Route path='/account/leave-rating/:id' element={
+            <RequiredAuth>
+              <LeaveRating />
             </RequiredAuth>
           }/>
 

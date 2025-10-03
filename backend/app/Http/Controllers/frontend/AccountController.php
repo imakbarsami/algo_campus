@@ -8,6 +8,7 @@ use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -278,6 +279,34 @@ class AccountController extends Controller
             'message'=>'Mark as complete successfully',
             'completedLessons'=>$completedLessons,
             'progress'=>$progress
+        ],200);
+    }
+
+    public function saveRating(Request $request){
+
+        $ratingCount=Review::where([
+            'user_id'=>$request->user()->id,
+            'course_id'=>$request->course_id
+        ])->count();
+
+        if($ratingCount>0){
+            return response()->json([
+                'status'=>409,
+                'message'=>'You have already rated this course'
+            ],409);
+        }
+
+        $review=new Review();
+        $review->user_id=$request->user()->id;
+        $review->course_id=$request->course_id;
+        $review->rating=$request->rating;
+        $review->comment=$request->comment;
+        $review->status=1;
+        $review->save();
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'Review saved successfully'
         ],200);
     }
 }

@@ -174,6 +174,30 @@ class CourseController extends Controller
     public function changeStatus(Request $request,$id){
 
         $course=Course::find($id);
+
+        //at least one chapter required
+        $chapters=Chapter::where('course_id',$id)->pluck('id')->toArray();
+
+        if(count($chapters)==0){
+            return response()->json([
+                'status'=>400,
+                'message'=>'At least one chapter required'
+            ],400);
+        }
+
+        //at least one lesson with video required
+        $lessonCount=Lesson::whereIn('chapter_id',$chapters)
+                            ->where('status',1)
+                            ->whereNotNull('video')
+                            ->count();
+
+        if($lessonCount==0){
+            return response()->json([
+                'status'=>400,
+                'message'=>'At least one lesson with video required'
+            ],400);
+        }
+        
         if(!$course){
             return response()->json([
                 'status'=>404,

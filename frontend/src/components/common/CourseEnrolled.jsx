@@ -57,6 +57,7 @@ const CourseEnrolled = ({enrollment}) => {
                         <div className="add-to-cart">
                             <Link to={`/account/watch-course/${enrollment.course.id}`} className="btn btn-primary" >Watch Now</Link>
                         </div>
+                        <Link to={`/account/leave-rating/${enrollment.course.id}`}>Leave Rating</Link>
                     </div>
                 </div>
             </div>

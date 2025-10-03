@@ -139,6 +139,8 @@ const EditCourse = () => {
             if(result.status==200){
                 toast.success(result.message)
                 setCourse({...course,status:result.course.status})
+            }else{
+                toast.error(result.message)
             }
         })
     }
