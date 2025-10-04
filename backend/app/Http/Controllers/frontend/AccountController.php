@@ -80,8 +80,17 @@ class AccountController extends Controller
 
     public function courses(Request $request){
 
-        $courses=Course::where('user_id',$request->user()->id)->with('level')->get();
+        $courses=Course::where('user_id',$request->user()->id)
+                        ->withCount('enrollments')
+                        ->withCount('reviews')
+                        ->withSum('reviews','rating')
+                        ->with('level')
+                        ->get();
 
+        $courses->map(function($course){
+            $course->avg_rating=$course->reviews_count>0?
+                number_format(($course->reviews_sum_rating/$course->reviews_count),1):"0.0";
+        });
         return response()->json([
             'status'=>200,
             'courses'=>$courses,
@@ -90,7 +99,20 @@ class AccountController extends Controller
 
     public function enrollments(Request $request){
 
-        $enrollments=Enrollment::where('user_id',$request->user()->id)->with(['course','course.level'])->get();
+        $enrollments=Enrollment::where('user_id',$request->user()->id)
+                                ->with([
+                                    'course'=>function($q){
+                                        $q->withCount('reviews');
+                                        $q->withSum('reviews','rating');
+                                        $q->withCount('enrollments');
+                                    },
+                                    'course.level'
+                                ])->get();
+
+        $enrollments->map(function($enrollment){
+            $enrollment->avg_rating=$enrollment->course->reviews_count>0?
+                number_format(($enrollment->course->reviews_sum_rating/$enrollment->course->reviews_count),1):"0.0";
+        });
 
         return response()->json([
             'status'=>200,

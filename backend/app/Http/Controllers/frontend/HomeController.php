@@ -10,6 +10,8 @@ use App\Models\Language;
 use App\Models\Level;
 use Illuminate\Http\Request;
 
+use function PHPSTORM_META\map;
+
 class HomeController extends Controller
 {
     public function fetchCategories(){
@@ -24,7 +26,19 @@ class HomeController extends Controller
 
     public function fetchCourses(){
 
-        $courses=Course::orderBy('created_at','asc')->where('is_featured','no')->where('status',1)->with('level')->get();
+        $courses=Course::orderBy('created_at','asc')
+                        ->where('is_featured','no')
+                        ->withCount('enrollments')
+                        ->withCount('reviews')
+                        ->withSum('reviews','rating')
+                        ->where('status',1)
+                        ->with('level')
+                        ->get();
+
+        $courses->map(function($course){
+            $course->avg_rating=$course->reviews_count>0?
+                    number_format(($course->reviews_sum_rating/$course->reviews_count),1):"0.0";
+        });
 
         return response()->json([
             'status'=>200,
@@ -79,7 +93,15 @@ class HomeController extends Controller
             }
         }
 
-        $courses=$courses->with('level')->get();
+        $courses=$courses->with('level')
+                        ->withCount('enrollments')
+                        ->withSum('reviews','rating')
+                        ->withCount('reviews')->get();
+
+        $courses->map(function($course){
+            $course->avg_rating=$course->reviews_count>0?
+                    number_format(($course->reviews_sum_rating/$course->reviews_count),1):"0.0";
+        });
 
         return response()->json([
             'status'=>200,
@@ -110,8 +132,13 @@ class HomeController extends Controller
     public function course_detail($id){
 
         $course=Course::where(['id'=>$id,'status'=>1])
+                      ->withCount('enrollments')
+                      ->withCount('reviews')
+                      ->withSum('reviews','rating')
                       ->withCount('chapters')
                       ->with([
+                        'reviews',
+                        'reviews.user',
                         'level',
                         'category',
                         'language',
@@ -137,6 +164,12 @@ class HomeController extends Controller
         $totalLessons=$course->chapters->sum('lessons_count');
         $course->total_duration=$totalDuration;
         $course->total_lessons=$totalLessons;
+                        
+
+        //count reviews
+        $course->avg_rating=$course->reviews_count>0?
+                    number_format(($course->reviews_sum_rating/$course->reviews_count),1):"0.0";
+
 
         if(!$course){
             return response()->json([

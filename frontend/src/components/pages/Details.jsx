@@ -9,6 +9,7 @@ import { LuMonitorPlay } from "react-icons/lu";
 import Loader from '../common/Loader';
 import FreePreview from '../common/FreePreview';
 import { toast } from 'react-hot-toast';
+import { set } from 'react-hook-form';
 
 
 const Details = () => {
@@ -16,6 +17,7 @@ const Details = () => {
   const [rating, setRating] = useState(4.0)
   const [course, setCourse] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [reviews, setReviews] = useState([])
   const navigate=useNavigate()
   const params=useParams()
 
@@ -43,9 +45,11 @@ const Details = () => {
       setLoading(false)
       if(result.status==200){
         setCourse(result.data)
+        setReviews(result.data.reviews)
       }
     })
   }
+  
 
   //enroll course
   const handleEnroll=async()=>{
@@ -86,6 +90,8 @@ const Details = () => {
     courseDetails()
   },[])
 
+
+  //console.log(reviews);
   //console.log(course.level.name);
 
   return (
@@ -118,8 +124,8 @@ const Details = () => {
                 <span className="badge bg-green">{course.category.name}</span>
               </div>
               <div className='d-flex ps-3'>
-                <div className="text pe-2 pt-1">0.0</div>
-                <Rating initialValue={rating} size={20} />
+                <div className="text pe-2 pt-1">{course.avg_rating ?course.avg_rating:0}</div>
+                <Rating initialValue={course.avg_rating?course.avg_rating:0} allowFraction size={20} readonly />
               </div>
             </div>
             <div className="row mt-4">
@@ -133,7 +139,7 @@ const Details = () => {
               </div>
               <div className="col">
                 <span className="text-muted d-block">Students</span>
-                <span className="fw-bold">0</span>
+                <span className="fw-bold">{course.enrollments_count?course.enrollments_count:0}</span>
               </div>
               <div className="col">
                 <span className="text-muted d-block">Language</span>
@@ -246,27 +252,23 @@ const Details = () => {
                   <p>Our student says about this course</p>
 
                   <div className='mt-4'>
-                    <div className="d-flex align-items-start mb-4 border-bottom pb-3">
-                      <img src="https://placehold.co/50" alt="User" className="rounded-circle me-3" />
-                      <div>
-                        <h6 className="mb-0">Mohit Singh <span className="text-muted fs-6">Jan 2, 2025</span></h6>
-                        <div className="text-warning mb-2">
-                          <Rating initialValue={rating} size={20} />
-                        </div>
-                        <p className="mb-0">Quisque et quam lacus amet. Tincidunt auctor phasellus purus faucibus lectus mattis.</p>
-                      </div>
-                    </div>
 
-                    <div className="d-flex align-items-start mb-4  pb-3">
-                      <img src="https://placehold.co/50" alt="User" className="rounded-circle me-3" />
-                      <div>
-                        <h6 className="mb-0">mark Doe <span className="text-muted fs-6">Jan 10, 2025</span></h6>
-                        <div className="text-warning mb-2">
-                          <Rating initialValue={rating} size={20} />
-                        </div>
-                        <p className="mb-0">Quisque et quam lacus amet. Tincidunt auctor phasellus purus faucibus lectus mattis.</p>
-                      </div>
-                    </div>
+                    {
+                      reviews && reviews.map(review=>{
+                        return(
+                           <div className="d-flex align-items-start mb-4 border-bottom pb-3" key={review.id}>
+                            <div>
+                              <h6 className="mb-0">{review.user.name} <span className="text-muted fs-6 ms-2">{review.created_at}</span></h6>
+                              <div className="text-warning mb-2">
+                                <Rating initialValue={review.rating} size={20} readonly />
+                              </div>
+                              <p className="mb-0">{review.comment}</p>
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                   
                   </div>
                 </div>
               </div>
