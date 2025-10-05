@@ -95,6 +95,7 @@ const LeaveRating = () => {
                         </div>
                         <div className='col-lg-9'>
                             <div className='row'>
+                                <div className='col-md-12'>
                                <div className='card p-3 border-0 shadow-lg'>
                                     <div className="card-body">
                                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -119,6 +120,7 @@ const LeaveRating = () => {
                                             <button className='btn btn-primary'>Submit</button>
                                         </form>
                                     </div>
+                               </div>
                                </div>
                             </div>
                         </div>

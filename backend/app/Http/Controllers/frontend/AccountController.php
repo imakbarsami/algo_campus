@@ -331,4 +331,57 @@ class AccountController extends Controller
             'message'=>'Review saved successfully'
         ],200);
     }
+
+
+    public function fetchUser(Request $request){
+
+        $user=User::find($request->user()->id);
+
+        if(empty($user)){
+            return response()->json([
+                'status'=>404,
+                'message'=>'User not found'
+            ],404);
+        }
+
+        return response()->json([
+            'status'=>200,
+            'user'=>$user
+        ],200);
+    }
+
+
+    public function updateUser(Request $request){
+
+        $user=User::find($request->user()->id);
+
+        if(empty($user)){
+            return response()->json([
+                'status'=>404,
+                'message'=>'User not found'
+            ],404);
+        }
+
+        $validator=Validator::make($request->all(),[
+            'name'=>'required',
+            'email'=>'required|email|unique:users,email,'.$user->id,
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->errors()
+            ],400);
+        }
+
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->save();
+
+        return response()->json([
+            'status'=>200,
+            'user'=>$user,
+            'message'=>'User updated successfully'
+        ],200);
+    }
 }

@@ -77,5 +77,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     //rating course
     Route::post('/save-rating',[AccountController::class,'saveRating']);
 
+
+    Route::get('/fetch-user',[AccountController::class,'fetchUser']);
+    Route::put('/update-user',[AccountController::class,'updateUser']);
     
 });

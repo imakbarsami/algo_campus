@@ -16,6 +16,9 @@ const UserSidebar = () => {
                         <li className='d-flex align-items-center'>
                             <Link to="/account/dashboard"><FaChartBar size={16} className='me-2 ' /> Dashboard</Link>
                         </li>
+                        <li className='d-flex align-items-center'>
+                            <Link to="/account/profile"><FaChartBar size={16} className='me-2 ' /> Profile</Link>
+                        </li>
 
                         <li className='d-flex align-items-center'>
                             <Link to="/account/my-learning"><BsMortarboardFill size={16} className='me-2' /> My Learning</Link>
