@@ -48,6 +48,13 @@ function App() {
           }
           />
 
+        <Route path='/account/change-password' element={
+            <RequiredAuth>
+              <ChangePassword />
+            </RequiredAuth>
+          }
+          />
+
           <Route path='/account/my-learning' element={
             <RequiredAuth>
               <MyLearning />

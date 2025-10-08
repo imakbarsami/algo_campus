@@ -80,5 +80,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::get('/fetch-user',[AccountController::class,'fetchUser']);
     Route::put('/update-user',[AccountController::class,'updateUser']);
+    Route::post('/change-password',[AccountController::class,'changePassword']);
     
 });

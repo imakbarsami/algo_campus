@@ -384,4 +384,44 @@ class AccountController extends Controller
             'message'=>'User updated successfully'
         ],200);
     }
+
+    public function changePassword(Request $request){
+        $user=User::find($request->user()->id);
+
+        if(empty($user)){
+            return response()->json([
+                'status'=>404,
+                'message'=>'User not found'
+            ],404);
+        }
+
+        $validator=Validator::make($request->all(),[
+            'old_password'=>['required',function($attribute,$value,$fail) use ($user){
+                if(!Hash::check($value,$user->password)){
+                    $fail('The old password is incorrect');
+                }
+            }],
+            
+            'password'=>'required|min:8',
+            'confirm_password'=>'required|same:password|',
+        ],[
+            'confirm_password.same'=>'Password and confirm password must be same'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->errors()
+            ],400);
+        }
+
+        $user->password=$request->password;
+        $user->save();
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'Password changed successfully'
+        ],200);
+        
+    }
 }
