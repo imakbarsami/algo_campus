@@ -28,7 +28,7 @@ const FeaturedCategories = () => {
             <div className="container">
                 <div className='section-title py-3  mt-4'>
                     <h2 className='h3'>Explore Categories</h2>
-                    <p>Discover categories designed to help you excel in your professional and personal growth.</p>
+                    <p>Discover learning paths designed to elevate your professional journey and personal potential.</p>
                 </div>
                 <div className='row gy-3'>
                     {
@@ -36,7 +36,7 @@ const FeaturedCategories = () => {
                             return (
                                 <div key={category.id} className='col-6 col-md-6 col-lg-3' >
                                     <div className='card shadow border-0'>
-                                        <div className='card-body'><Link>{category.name}</Link></div>
+                                        <div className='card-body'><Link to={`/courses?category=${category.id}`}>{category.name}</Link></div>
                                     </div>
                                 </div>
                             )

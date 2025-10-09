@@ -32,7 +32,7 @@ const FeaturedCourses = () => {
             <div className="container">
                 <div className='section-title py-3  mt-4'>
                     <h2 className='h3'>Featured Courses</h2>
-                    <p>Discover courses designed to help you excel in your professional and personal growth.</p>
+                    <p>Find your path. Grow your skills. Shape your future.</p>
                 </div>
                 <div className="row gy-4">
                     {

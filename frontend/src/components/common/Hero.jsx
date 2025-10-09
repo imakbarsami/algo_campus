@@ -1,5 +1,5 @@
 import React from 'react'
-import HeroImg from  '../../assets/images/hero-4.png'
+import HeroImg from  '../../assets/images/hero-algo.png'
 
 const Hero = () => {
     return (
@@ -7,12 +7,12 @@ const Hero = () => {
             <div className='container '>
                 <div className="row align-items-center">
                     <div className="col-md-6">
-                        <h1 className="display-3 fw-bold">Learn Anytime, Anywhere</h1>
-                        <p className="lead">Join our Learning Management System and explore a wide range of courses to enhance your skills and achieve your goals.</p>
+                        <h1 className="display-3 fw-bold">Education Made Flexible</h1>
+                        <p className="lead">High-quality courses in every discipline. Learn online, at your own pace, with expert instructors and real-world projects.</p>
                         <a href="/courses" className="btn btn-white">Explore Courses</a>
                     </div>
                     <div className="col-md-6 text-center">
-                        <img src={HeroImg} alt="Student Learning" className="img-fluid " />
+                        <img src={HeroImg} alt="Student Learning" className="img-fluid mb-2 " />
                     </div>
                 </div>
             </div>

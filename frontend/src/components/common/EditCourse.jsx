@@ -69,7 +69,7 @@ const EditCourse = ({ course,deleteCourse }) => {
                         <div className="d-flex py-2 justify-content-between align-items-center">
                             <div className="add-to-cart">
                                 <Link to={`/account/courses/edit/${course.id}`} className="btn btn-primary">Edit</Link>
-                                <Link onClick={()=>deleteCourse(course.id)} className="btn btn-danger ms-2">Delete</Link>
+                                <Link onClick={()=>deleteCourse(course.id)} className="btn btn-red ms-2">Delete</Link>
                             </div>
                         </div>
                     </div>

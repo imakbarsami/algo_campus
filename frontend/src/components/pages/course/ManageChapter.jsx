@@ -226,7 +226,7 @@ const ManageChapter = ({ course, pram }) => {
                                                                         </div>
                                                                         <div className="col-md-5 text-end">
                                                                             {
-                                                                                lesson.duration > 0 && <small className="fw-bold text-muted me-2">20 Mins</small>
+                                                                                lesson.duration > 0 && <small className="fw-bold text-muted me-2">{lesson.duration} Mins</small>
                                                                             }
                                                                             {
                                                                                 lesson.is_free_premium == 'yes' && <span className="badge bg-success">Preview </span>

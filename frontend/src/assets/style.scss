@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 $primary-font:  "DM Sans", serif;
 
-$primary-color: #FEc748;
+$primary-color: #048f96;
 $primary-white: #FFF;
 $primary-black: #000;
-$secondary-color: #1da599;
+$secondary-color: #031513;
 $tertiary-color: #3ecbda;
-$bg-light: #f6f3f3;
+$bg-light: #e6e6e6;
 $text-grey: #585858;
+
 
 body{
    font-family: $primary-font; 
@@ -66,12 +67,19 @@ p{
     font-size: 1em;
 }
 
+.btn-red{
+    background-color: #ff6467;
+    &:hover{
+        background-color: $primary-color;
+    }
+}
 .btn-primary{
     background-color: $secondary-color;
     border-color: $secondary-color;
     &:hover{
         background-color: $primary-color;
         border-color: $primary-color;
+        color: #031513;
     }
     
 }
@@ -324,7 +332,7 @@ footer{
             a{
                 color: #efecec;
                 &:hover{
-                    color: $primary-black;
+                    color: #a9a1a1;
                 }
             }
         }
