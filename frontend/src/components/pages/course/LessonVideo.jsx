@@ -62,10 +62,10 @@ const LessonVideo = ({ lesson }) => {
                     {
                         videoUrl && <ReactPlayer
                             width="100%"
-                            height="100%"
+                            height="200px"
                             controls
                             src={videoUrl}
-                            className='rounded'
+                            className='rounded shadow-lg'
                         />
                     }
 

@@ -39,7 +39,9 @@ const EditLesson = ({ placeholder }) => {
                             placeholder:result.data.description,
                         })
                         setChecked(result.data.is_free_premium=='yes'?true:false)
+                        console.log(result)
                         setContent(result.data.description)
+                        setDescription(result.data.description)
                         setLesson(result.data)
                     }
                 })
@@ -71,8 +73,8 @@ const EditLesson = ({ placeholder }) => {
                     chapter:result.data.chapter_id,
                     duration:result.data.duration,
                     status:result.data.status,
-                    free_preview:result.data.is_free_premium
                 })
+                //setChecked(result.data.is_free_premium=='yes'?true:false)
 
             }else{
                 const errors=result.errors

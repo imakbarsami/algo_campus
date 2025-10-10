@@ -110,17 +110,10 @@ const WatchCourse = () => {
                     <div className='video'>
                       {
                         <ReactPlayer
-                         className='rounded'
+                         className='rounded shadow-lg'
                           width='100%'
                           height='100%'
                           controls
-                          config={{
-                            file: {
-                              attribute: {
-                                controlsList: 'nodownload'
-                              }
-                            }
-                          }}
                           src={activeLesson.video_url}
                         />
                       }
