@@ -434,6 +434,7 @@ class AccountController extends Controller
         $totalPrice = number_format($sales->sum('course_sum_price'),2);
 
         return response()->json([
+            'status'=>200,
             'enrolled'=>$enrolled,
             'activeCourse'=>$activeCourse,
             'totalPrice'=>$totalPrice,
