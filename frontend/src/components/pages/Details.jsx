@@ -18,6 +18,7 @@ const Details = () => {
   const [course, setCourse] = useState(null)
   const [loading, setLoading] = useState(true)
   const [reviews, setReviews] = useState([])
+  const [reviewCount, setReviewCount] = useState(0)
   const navigate = useNavigate()
   const params = useParams()
 
@@ -46,6 +47,7 @@ const Details = () => {
         if (result.status == 200) {
           setCourse(result.data)
           setReviews(result.data.reviews)
+          setReviewCount(result.data.reviews_count)
         }
       })
   }
@@ -247,7 +249,7 @@ const Details = () => {
                 </div>
 
                 { 
-                  reviews>0 && (
+                  reviewCount>0 && (
                     <div className='col-md-12 mt-4'>
                       <div className='border bg-white rounded-3 p-4'>
                         <h3 className='mb-3 h4'>Reviews</h3>

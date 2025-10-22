@@ -22,8 +22,8 @@ const Dashboard = () => {
         .then(result=>{
             if(result.status==200){
                 setEnrolled(result.enrolled)
-                setActiveCourses(result.activeCourses)
-                setSales(result.sales)
+                setActiveCourses(result.activeCourse)
+                setSales(result.totalPrice)
             }
         })
     }
@@ -56,7 +56,7 @@ const Dashboard = () => {
                                 <div className='col-md-4'>
                                     <div className='card shadow '>
                                         <div className='card-body p-3'>
-                                            <h2>{sales}</h2>
+                                            <h2>${sales}</h2>
                                             <span>Sales</span>
                                         </div>
                                         <div className='card-footer'>
@@ -83,7 +83,7 @@ const Dashboard = () => {
                                             <span>Active Courses</span>
                                         </div>
                                         <div className='card-footer'>
-                                            <Link to="/">View Courses</Link>
+                                            <Link to="/courses">View Courses</Link>
                                         </div>
                                     </div>
                                 </div>
