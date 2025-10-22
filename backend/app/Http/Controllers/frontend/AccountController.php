@@ -424,4 +424,19 @@ class AccountController extends Controller
         ],200);
         
     }
+
+    //dashboad info
+    public function dashboardInfo(){
+
+        $enrolled=Enrollment::all()->count();
+        $activeCourse=Course::where('status',1)->count();
+        $sales = Enrollment::withSum('course', 'price')->get();
+        $totalPrice = number_format($sales->sum('course_sum_price'),2);
+
+        return response()->json([
+            'enrolled'=>$enrolled,
+            'activeCourse'=>$activeCourse,
+            'totalPrice'=>$totalPrice,
+        ]);
+    }
 }
