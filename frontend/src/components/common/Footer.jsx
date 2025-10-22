@@ -10,7 +10,7 @@ const Footer = () => {
   const [categories,setCategories]=React.useState([])
 
   const fetchCategories=async()=>{
-      await fetch(`${apiUrl}/fetch-categories`,{
+      await fetch(`${apiUrl}/popular-categories`,{
          method:'GET',
          headers: {
              'Content-Type': 'application/json',

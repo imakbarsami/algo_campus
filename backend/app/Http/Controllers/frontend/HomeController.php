@@ -213,4 +213,13 @@ class HomeController extends Controller
         ],200); 
     }
 
+
+    //popular categories
+    public function popularCategories(){
+        $categories=Category::withCount('courses')->having('courses_count','>=',2)->get();
+        return response()->json([
+            'status'=>200,
+            'data'=>$categories
+        ],200);
+    }
 }
