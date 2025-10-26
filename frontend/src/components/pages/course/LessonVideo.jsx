@@ -64,7 +64,7 @@ const LessonVideo = ({ lesson }) => {
                             width="100%"
                             height="200px"
                             controls
-                            src={videoUrl}
+                            url={videoUrl}
                             className='rounded shadow-lg'
                         />
                     }

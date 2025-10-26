@@ -23,7 +23,7 @@ const FreePreview = ({show,handleClose,lessonData}) => {
                         }
                     }
                    }
-                    src={lessonData.video_url}
+                    url={lessonData.video_url}
                 />
             </Modal.Body>
             <Modal.Footer>

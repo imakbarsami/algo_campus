@@ -13,7 +13,7 @@ const WatchCourse = () => {
 
   const [course, setCourse] = React.useState();
   const prams = useParams();
-  const [activeLesson, setActiveLesson] = React.useState(null);
+  const [activeLesson, setActiveLesson] = React.useState([]);
   const [completedLessons,setCompletedLessons]=React.useState([]);
   const [progress, setProgress] = React.useState(0);
 
@@ -95,7 +95,7 @@ const WatchCourse = () => {
     fetchCourse();
   }, [])
 
-  //console.log(course);
+  console.log(activeLesson.video_url);
   return (
     <Layout>
       {
@@ -114,9 +114,10 @@ const WatchCourse = () => {
                           width='100%'
                           height='100%'
                           controls
-                          src={activeLesson.video_url}
+                          url={activeLesson.video_url}
                         />
                       }
+                      
                     </div>
                     <div className='meta-content'>
                       <div className='d-flex justify-content-between align-items-center border-bottom pb-2 mb-3 pt-1'>
